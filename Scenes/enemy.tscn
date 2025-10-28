@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://c17g3nqth1mvs"]
+
+[ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_hghv2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1f0kj"]
+albedo_color = Color(1, 0.30588236, 0.32941177, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_afpow"]
+material = SubResource("StandardMaterial3D_1f0kj")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_287tu"]
+size = Vector3(2, 2, 2)
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_hghv2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_afpow")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_287tu")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
