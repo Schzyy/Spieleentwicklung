@@ -3,32 +3,35 @@ using System;
 
 public partial class Enemy : CharacterBody3D
 {
-    private NavigationAgent3D navigationAgent3D;
+    private NavigationAgent3D navAgent;
 
-    [Export]
-    public float Speed = 4f;
+    [Export] public float Speed = 4f;
+    [Export] public Node3D target;
 
     public override void _Ready()
     {
-        navigationAgent3D = GetNode<NavigationAgent3D>("NavigationAgent3D");
+        AddToGroup("Enemy");
+        navAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
+        if(target != null)
+        {
+            navAgent.TargetPosition = target.GlobalTransform.Origin;
+        }
     }
     public override void _PhysicsProcess(double delta)
     {
-        if (Input.IsActionJustPressed("ui_home"))
+        if (navAgent.IsNavigationFinished())
         {
-            Vector3 targetPos = new Vector3
-            {
-                X = (float)GD.RandRange(-20.0, 20.0),
-                Z = (float)GD.RandRange(-20.0, 20.0)
-            };
-            navigationAgent3D.TargetPosition = targetPos;
+            return;
         }
-        Vector3 nextWaypoint = navigationAgent3D.GetNextPathPosition();
-        Vector3 vectorToNextWaypoint = nextWaypoint - GlobalPosition;
-
-        Vector3 direction = vectorToNextWaypoint.Normalized();
+        Vector3 nextPathPos = navAgent.GetNextPathPosition();
+        Vector3 direction = (nextPathPos - GlobalTransform.Origin).Normalized();
         Velocity = direction * Speed;
         MoveAndSlide();
+    }   
+    public void setTarget(Node3D target)
+    {
+        this.target = target;
+        navAgent.TargetPosition = target.GlobalTransform.Origin;
     }
 
 }

@@ -18,3 +18,11 @@ config/icon="res://icon.svg"
 [dotnet]
 
 project/assembly_name="Spieleentwicklung_HiveDefense"
+
+[global_group]
+
+Breakable=""
+Enemy=""
+Allies=""
+Player=""
+Neutral=""
