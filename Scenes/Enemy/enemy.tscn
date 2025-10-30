@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c17g3nqth1mvs"]
+[gd_scene load_steps=6 format=3 uid="uid://c17g3nqth1mvs"]
 
-[ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_hghv2"]
+[ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_nvvbs"]
+[ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_2t2r4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hghv2"]
 albedo_color = Color(0.015686275, 1, 1, 1)
@@ -11,7 +12,7 @@ material = SubResource("StandardMaterial3D_hghv2")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_afpow"]
 
 [node name="Enemy" type="CharacterBody3D"]
-script = ExtResource("1_hghv2")
+script = ExtResource("1_nvvbs")
 Speed = 7.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -22,3 +23,5 @@ shape = SubResource("CapsuleShape3D_afpow")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 debug_enabled = true
+
+[node name="DetectionComponent" parent="." instance=ExtResource("2_2t2r4")]
