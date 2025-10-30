@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dec1cf74vl45y"]
 
-[ext_resource type="Script" uid="uid://dit3713gjyyxg" path="res://Turret.cs" id="1_fcprl"]
+[ext_resource type="Script" uid="uid://dit3713gjyyxg" path="res://Scripts/Turret.cs" id="1_fcprl"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_axnog"]
 top_radius = 1.5

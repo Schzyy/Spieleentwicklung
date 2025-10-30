@@ -1,0 +1,135 @@
+[gd_scene load_steps=9 format=3 uid="uid://cvx4e55pk470m"]
+
+[ext_resource type="Script" uid="uid://s20daxen2qiq" path="res://Scripts/Spawner.cs" id="1_mrjhh"]
+[ext_resource type="PackedScene" uid="uid://c17g3nqth1mvs" path="res://Scenes/Enemy/enemy.tscn" id="2_s1m74"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_sv7hm"]
+[ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="3_tw55o"]
+[ext_resource type="PackedScene" uid="uid://hoi4v81j7705" path="res://Attributes/CameraMovementComponent.tscn" id="4_s1m74"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_7u77a"]
+vertices = PackedVector3Array(-58, 6, -24, -58, 6, -20, -52, 6, -22, -4, 6, -20, -2, 6, 0, 2, 6, 0, 4, 6, -20, 58, 6, -20, 58, 6, -24, -44, 6, -24, -42, 6, -20, -50, 7, -10, -46, 7, -8, -46, 7, -20, -50, 7, -20, -58, 1, 16, -54, 1, 16, -54, 1, 6, -58, 1, -16, -50, 1, 4, -54, 1, -16, -44, 1, -6, -42, 1, 16, -34, 1, 16, -32, 1, -8, -42, 1, -16, 38, 1, -6, 38, 1, 16, 58, 1, 16, 58, 1, -16, 4, 1, 4, -6, 1, 2, -22, 1, 16, 26, 1, 16, -22, 1, -6, -6, 1, -16, 28, 1, -8, 6, 1, -16, -30, 6, -4, -30, 6, 16, -26, 6, 14, -26, 6, -4, -50, 7, 18, -58, 7, 20, -58, 7, 24, -44, 7, 20, -46, 7, 6, -50, 7, 8, 58, 7, 24, 58, 7, 20)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Array(5, 3, 6), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(3, 10, 9), PackedInt32Array(6, 3, 9), PackedInt32Array(14, 13, 11), PackedInt32Array(11, 13, 12), PackedInt32Array(16, 15, 17), PackedInt32Array(17, 15, 18), PackedInt32Array(20, 19, 18), PackedInt32Array(18, 19, 17), PackedInt32Array(25, 24, 21), PackedInt32Array(21, 24, 22), PackedInt32Array(22, 24, 23), PackedInt32Array(27, 26, 28), PackedInt32Array(28, 26, 29), PackedInt32Array(31, 30, 32), PackedInt32Array(32, 30, 33), PackedInt32Array(24, 25, 34), PackedInt32Array(34, 25, 35), PackedInt32Array(37, 36, 30), PackedInt32Array(30, 36, 33), PackedInt32Array(35, 31, 34), PackedInt32Array(34, 31, 32), PackedInt32Array(26, 36, 29), PackedInt32Array(29, 36, 37), PackedInt32Array(41, 40, 38), PackedInt32Array(38, 40, 39), PackedInt32Array(43, 42, 44), PackedInt32Array(44, 42, 45), PackedInt32Array(47, 46, 42), PackedInt32Array(42, 46, 45), PackedInt32Array(49, 48, 45), PackedInt32Array(45, 48, 44)]
+sample_partition_type = 1
+geometry_parsed_geometry_type = 0
+cell_size = 2.0
+border_size = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_jjgbg"]
+size = Vector3(120, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bo1nx"]
+
+[node name="Main" type="Node3D"]
+
+[node name="EnemyPathing" type="Node3D" parent="."]
+
+[node name="Spawner" type="Node3D" parent="EnemyPathing" node_paths=PackedStringArray("spawnpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_mrjhh")
+EnemyScene = ExtResource("2_s1m74")
+spawnpoint = NodePath("Spawn")
+
+[node name="Target" type="Node3D" parent="EnemyPathing/Spawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, 0)
+
+[node name="Spawn" type="Node3D" parent="EnemyPathing/Spawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 1, 0)
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+navigation_mesh = SubResource("NavigationMesh_7u77a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Navigation"]
+mesh = SubResource("BoxMesh_jjgbg")
+
+[node name="Physical" type="Node3D" parent="Navigation"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Navigation/Physical"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Navigation/Physical/StaticBody3D"]
+shape = SubResource("BoxShape3D_bo1nx")
+
+[node name="Walls" type="CSGCombiner3D" parent="Navigation/Physical"]
+use_collision = true
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+size = Vector3(120, 11, 5)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 22)
+size = Vector3(120, 11, 5)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -28.5, 0, 7.499998)
+size = Vector3(25, 11, 5)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.4206202e-06, 0, -11.5)
+size = Vector3(25, 11, 5)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 31.5, 0, 7.5)
+size = Vector3(25, 11, 5)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -48, 1, -14.5)
+size = Vector3(13, 11, 5)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Navigation/Physical/Walls"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -48, 1, 13.5)
+size = Vector3(13, 11, 5)
+
+[node name="Breakable" type="CSGCombiner3D" parent="Navigation/Physical"]
+use_collision = true
+
+[node name="DefendingWall" type="CSGBox3D" parent="Navigation/Physical/Breakable" groups=["Breakable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47, 3, -0.5)
+size = Vector3(1, 7, 16)
+
+[node name="HealthComponent" parent="Navigation/Physical/Breakable/DefendingWall" instance=ExtResource("3_sv7hm")]
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.70710677, -0.7071068, 1.4490263e-07, -1.6929752e-07, 3.5625746e-08, 1, -0.7071068, -0.7071067, -9.452022e-08, 0, 23, 0)
+shadow_enabled = true
+
+[node name="Turrets" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+
+[node name="Turret" parent="Turrets" instance=ExtResource("3_tw55o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 4, 0)
+
+[node name="Turret2" parent="Turrets" instance=ExtResource("3_tw55o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -1)
+
+[node name="Turret3" parent="Turrets" instance=ExtResource("3_tw55o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+
+[node name="CameraMovementComponent" parent="Camera3D" instance=ExtResource("4_s1m74")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Crosshair" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Crosshair"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(0, 0, 0, 1)

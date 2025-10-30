@@ -28,19 +28,15 @@ public partial class Turret : Node3D
 
     public override void _Process(double delta)
     {
-        setScoutRange();
         scout(delta);
     }
-
-    private void setScoutRange()
-    {
-        float area = Mathf.Pi * range * range;
-    }
-
     private void scout(double delta)
     {
         var spaceState = GetWorld3D().DirectSpaceState;
-        var sphereShape = new SphereShape3D { Radius = range };
+        var sphereShape = new SphereShape3D
+        {
+            Radius = range
+        };
 
         var query = new PhysicsShapeQueryParameters3D
         {
@@ -72,8 +68,6 @@ public partial class Turret : Node3D
                 }
             }
         }
-
-        // Draw debug line to closest enemy
         DrawDebugLine(closestEnemy);
 
         if (closestEnemy != null)
@@ -89,7 +83,7 @@ public partial class Turret : Node3D
         if (toTarget.LengthSquared() < 0.0001f)
         {
             return;
-        }    
+        }
         toTarget = toTarget.Normalized();
         Basis targetBasis = Basis.LookingAt(toTarget, Vector3.Up);
         Basis currentBasis = GlobalTransform.Basis.Orthonormalized();
@@ -98,30 +92,30 @@ public partial class Turret : Node3D
         GlobalTransform = new Transform3D(newBasis, GlobalTransform.Origin);
     }
 
-private void DrawDebugLine(Node3D enemy)
-{
-    debugLineMesh.ClearSurfaces();
-
-    if (enemy == null)
-        return;
-
-    StandardMaterial3D lineMat = new StandardMaterial3D
+    private void DrawDebugLine(Node3D enemy)
     {
-        AlbedoColor = Colors.Red,
-        ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-        VertexColorUseAsAlbedo = true
-    };
-    debugLineInstance.MaterialOverride = lineMat;
+        debugLineMesh.ClearSurfaces();
 
-    debugLineMesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
+        if (enemy == null)
+            return;
 
-    Vector3 start = debugLineInstance.ToLocal(bulletHole.GlobalPosition);
-    Vector3 end = debugLineInstance.ToLocal(enemy.GlobalPosition);
+        StandardMaterial3D lineMat = new StandardMaterial3D
+        {
+            AlbedoColor = Colors.Red,
+            ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+            VertexColorUseAsAlbedo = true
+        };
+        debugLineInstance.MaterialOverride = lineMat;
 
-    debugLineMesh.SurfaceAddVertex(start);
-    debugLineMesh.SurfaceAddVertex(end);
+        debugLineMesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
 
-    debugLineMesh.SurfaceEnd();
-}
+        Vector3 start = debugLineInstance.ToLocal(bulletHole.GlobalPosition);
+        Vector3 end = debugLineInstance.ToLocal(enemy.GlobalPosition);
+
+        debugLineMesh.SurfaceAddVertex(start);
+        debugLineMesh.SurfaceAddVertex(end);
+
+        debugLineMesh.SurfaceEnd();
+    }
 
 }
