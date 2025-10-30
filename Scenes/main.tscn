@@ -21,6 +21,7 @@ size = Vector3(120, 1, 60)
 [node name="EnemyPathing" type="Node3D" parent="."]
 
 [node name="Spawner" type="Node3D" parent="EnemyPathing" node_paths=PackedStringArray("spawnpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_jjgbg")
 EnemyScene = ExtResource("2_bo1nx")
 spawnpoint = NodePath("Spawn")
@@ -29,7 +30,7 @@ spawnpoint = NodePath("Spawn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, 0)
 
 [node name="Spawn" type="Node3D" parent="EnemyPathing/Spawner"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 1, 0)
 
 [node name="Navigation" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_7u77a")
@@ -87,9 +88,15 @@ transform = Transform3D(0.70710677, -0.7071068, 1.4490263e-07, -1.6929752e-07, 3
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.99970967, -0.023915315, -0.0029469412, 0.011566075, 0.368965, 0.9293713, -0.02113889, -0.9291356, 0.36913446, -19, 63, 20)
+transform = Transform3D(-0.9980225, 0.007059695, -0.062460415, -0.032695416, 0.7903705, 0.6117561, 0.05368568, 0.61258847, -0.7885767, 11, 36, -38)
 
 [node name="Turrets" type="Node3D" parent="."]
 
-[node name="StaticBody3D" parent="Turrets" instance=ExtResource("3_8gbba")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 32, 5, 0)
+[node name="Turret" parent="Turrets" instance=ExtResource("3_8gbba")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 6, 0)
+
+[node name="Turret2" parent="Turrets" instance=ExtResource("3_8gbba")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -1)
+
+[node name="Turret3" parent="Turrets" instance=ExtResource("3_8gbba")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 6, 0)
