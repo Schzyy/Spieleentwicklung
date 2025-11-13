@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1nha2vd8ke5q"]
 
-[ext_resource type="Script" uid="uid://bmicgout2jpyb" path="res://Scripts/DetectionComponent.cs" id="1_xiecc"]
+[ext_resource type="Script" uid="uid://bmicgout2jpyb" path="res://Scripts/Components/DetectionComponent.cs" id="1_xiecc"]
 
 [node name="DetectionComponent" type="Node3D"]
 script = ExtResource("1_xiecc")

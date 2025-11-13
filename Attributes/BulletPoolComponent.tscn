@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://byx0loevvgu3w"]
+
+[ext_resource type="Script" uid="uid://ceptcwp8hhq48" path="res://Scripts/Components/BulletPoolComponent.cs" id="1_h418m"]
+
+[node name="BulletPoolComponent" type="Node3D"]
+script = ExtResource("1_h418m")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://1dh17t25t335"]
+
+[ext_resource type="Script" uid="uid://wg73t5hbom84" path="res://PathComponent.cs" id="1_5m31c"]
+
+[node name="PathComponent" type="Node3D"]
+script = ExtResource("1_5m31c")

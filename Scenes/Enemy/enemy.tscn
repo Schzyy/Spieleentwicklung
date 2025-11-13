@@ -1,7 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://c17g3nqth1mvs"]
+[gd_scene load_steps=10 format=3 uid="uid://c17g3nqth1mvs"]
 
 [ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_nvvbs"]
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_2t2r4"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_2t2r4"]
+[ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://PathComponent.tscn" id="4_dmwl5"]
+[ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="5_gx76c"]
+[ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="6_pqgp3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hghv2"]
 albedo_color = Color(0.015686275, 1, 1, 1)
@@ -16,12 +20,23 @@ script = ExtResource("1_nvvbs")
 Speed = 7.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_1f0kj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["Enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_afpow")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 debug_enabled = true
 
 [node name="DetectionComponent" parent="." instance=ExtResource("2_2t2r4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_2t2r4")]
+
+[node name="PathComponent" parent="." instance=ExtResource("4_dmwl5")]
+
+[node name="AttackComponent" parent="." instance=ExtResource("5_gx76c")]
+
+[node name="BulletPoolComponent" parent="." instance=ExtResource("6_pqgp3")]

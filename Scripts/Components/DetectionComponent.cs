@@ -5,26 +5,32 @@ using System.Collections.Generic;
 public partial class DetectionComponent : Node3D
 {
     [Export] public float range = 10f;
-    [Export] public Godot.Collections.Array<string> GroupMembers { get; set; } = new Godot.Collections.Array<string> { };
+    [Export] public bool detectEnemy = false;
+    [Export] public bool detectBreakable = false;
+    [Export] public bool detectPlayer = false;
+    [Export] public bool detectTurret = false;
     [Export] public bool debug = true;
+    public event Action<Node3D> targetDected;
     private Vector3 position;
     private MeshInstance3D debugLineInstance;
     private ImmediateMesh debugLineMesh;
 
+    // public event Action<Node3D> changeTarget;
+
     public override void _Ready()
-    {        
+    {
     }
+
     private void scout(double delta)
     {
         var spaceState = GetWorld3D().DirectSpaceState;
-        var sphereShape = new SphereShape3D
+        var sphere = new SphereShape3D
         {
             Radius = range
         };
-
         var query = new PhysicsShapeQueryParameters3D
         {
-            Shape = sphereShape,
+            Shape = sphere,
             Transform = new Transform3D(Basis.Identity, position),
             CollideWithBodies = true,
             CollideWithAreas = true
@@ -37,15 +43,32 @@ public partial class DetectionComponent : Node3D
             if (result.TryGetValue("collider", out var colliderObj))
             {
                 var collider = colliderObj.AsGodotObject() as Node3D;
-
-                // if (collider != null && collider.IsInGroup(GroupMembers.Contains))
+                if (collider == null)
                 {
-                    float dist = GlobalPosition.DistanceTo(collider.GlobalPosition);
+                    return;
+                }
+                if (collider.IsInGroup("Enemy") && detectEnemy == true)
+                {
+                    targetDected?.Invoke(collider);
+                }
+                if (collider.IsInGroup("Breakable") && detectBreakable == true)
+                {
+                    targetDected?.Invoke(collider);
+                }
+                if (collider.IsInGroup("Turret") && detectTurret == true)
+                {
+                    targetDected?.Invoke(collider);
+                }
+                if (collider.IsInGroup("Player") && detectPlayer == true)
+                {
+                    targetDected?.Invoke(collider);
+                }
+                {
+                    // float dist = GlobalPosition.DistanceTo(collider.GlobalPosition);
                 }
             }
         }
     }
-
     private void DrawDebugLine(Node3D target)
     {
         debugLineMesh.ClearSurfaces();
