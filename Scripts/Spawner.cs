@@ -12,8 +12,10 @@ public partial class Spawner : Node3D
     private void SpawnEnemy()
     {
         var ene = (Enemy)EnemyScene.Instantiate();
+        GD.Print("PreChildAdd");
         AddChild(ene);
-        ene.setTarget(GetNode<Node3D>("Target"));
+        GD.Print("PostChildAdd");
+        ene.setMainTarget(GetNode<Node3D>("Target"));
         ene.GlobalTransform = new Transform3D(ene.GlobalTransform.Basis, spawnpoint.GlobalTransform.Origin);
     }
 }
