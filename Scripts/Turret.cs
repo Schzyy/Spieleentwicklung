@@ -90,6 +90,12 @@ public partial class Turret : Node3D
         targetBasis = targetBasis.Orthonormalized();
         Basis newBasis = currentBasis.Slerp(targetBasis, (float)(rotationSpeed * delta));
         GlobalTransform = new Transform3D(newBasis, GlobalTransform.Origin);
+
+    }
+
+    private void shoot()
+    {
+        
     }
 
     private void DrawDebugLine(Node3D enemy)

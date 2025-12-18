@@ -1,0 +1,125 @@
+[gd_scene load_steps=16 format=3 uid="uid://bn3et8iqu7g36"]
+
+[ext_resource type="Script" uid="uid://cvjq05icmyw3v" path="res://Scripts/LevelTwo.cs" id="1_7dcja"]
+[ext_resource type="PackedScene" uid="uid://hoi4v81j7705" path="res://Attributes/CameraMovementComponent.tscn" id="2_j431e"]
+[ext_resource type="Script" uid="uid://s20daxen2qiq" path="res://Scripts/Spawner.cs" id="3_fttda"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_wyt7w"]
+[ext_resource type="PackedScene" uid="uid://c17g3nqth1mvs" path="res://Scenes/Enemy/enemy.tscn" id="4_yuuh3"]
+[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="6_77fsy"]
+[ext_resource type="Script" uid="uid://p2eup3blctp6" path="res://Maps/NavigationRegion.cs" id="6_lwike"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wyt7w"]
+size = Vector3(10, 0, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fttda"]
+size = Vector3(10, 10, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yuuh3"]
+size = Vector3(10, 10, 10)
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_1rj0e"]
+vertices = PackedVector3Array(-6.5, 1, -11.25, -5.25, 1, -11.5, -5.25, 1, -24.5, -49.5, 1, -24.5, -4.25, 1, 24.5, -4, 1, 10.75, -6.5, 1, 10.25, -49.5, 1, 24.5, 5, 1, -10.75, 5.25, 1, -24.5, 7.5, 1, 11.25, 6.25, 1, 11.5, 6.25, 1, 24.5, 49.5, 1, 24.5, 7.5, 1, -10.25, 49.5, 1, -24.5, 6, 1, 7.5)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(5, 4, 6), PackedInt32Array(6, 4, 7), PackedInt32Array(0, 6, 3), PackedInt32Array(3, 6, 7), PackedInt32Array(2, 9, 1), PackedInt32Array(1, 9, 8), PackedInt32Array(11, 10, 12), PackedInt32Array(12, 10, 13), PackedInt32Array(8, 9, 14), PackedInt32Array(14, 9, 15), PackedInt32Array(16, 14, 10), PackedInt32Array(10, 14, 13), PackedInt32Array(13, 14, 15), PackedInt32Array(12, 4, 11), PackedInt32Array(11, 4, 5)]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7dcja"]
+size = Vector3(100, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j431e"]
+size = Vector3(100, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwike"]
+size = Vector3(5, 5, 15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ctdg5"]
+size = Vector3(5, 5, 15)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_7dcja")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="CameraMovementComponent" parent="Camera3D" instance=ExtResource("2_j431e")]
+
+[node name="UniquePoints" type="Node3D" parent="."]
+
+[node name="EnemySpawn" type="Node3D" parent="UniquePoints" node_paths=PackedStringArray("timer", "castle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 1, 0)
+script = ExtResource("3_fttda")
+EnemyScene = ExtResource("4_yuuh3")
+timer = NodePath("Timer")
+castle = NodePath("../Castle")
+
+[node name="Area3D" type="Area3D" parent="UniquePoints/EnemySpawn"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UniquePoints/EnemySpawn/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_wyt7w")
+
+[node name="Timer" type="Timer" parent="UniquePoints/EnemySpawn"]
+wait_time = 10.0
+autostart = true
+
+[node name="Castle" type="Node3D" parent="UniquePoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 0)
+
+[node name="HealthComponent" parent="UniquePoints/Castle" instance=ExtResource("3_wyt7w")]
+
+[node name="targerPoint" type="Node3D" parent="UniquePoints/Castle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="HurtBoxComponent" parent="UniquePoints/Castle" node_paths=PackedStringArray("healthComponent", "navReg") instance=ExtResource("6_77fsy")]
+healthComponent = NodePath("../HealthComponent")
+navReg = NodePath("../../../overworld")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UniquePoints/Castle/HurtBoxComponent" groups=["Breakable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+shape = SubResource("BoxShape3D_fttda")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="UniquePoints/Castle" groups=["Breakable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = SubResource("BoxMesh_yuuh3")
+skeleton = NodePath("")
+
+[node name="overworld" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_1rj0e")
+script = ExtResource("6_lwike")
+
+[node name="ground" type="StaticBody3D" parent="overworld" groups=["walkable"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="overworld/ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_7dcja")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="overworld/ground"]
+shape = SubResource("BoxShape3D_j431e")
+
+[node name="walls" type="Node3D" parent="overworld"]
+
+[node name="HurtBoxComponent" parent="overworld/walls" node_paths=PackedStringArray("healthComponent") groups=["Breakable"] instance=ExtResource("6_77fsy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+healthComponent = NodePath("HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="overworld/walls/HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_lwike")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="overworld/walls/HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_ctdg5")
+
+[node name="HealthComponent" parent="overworld/walls/HurtBoxComponent" node_paths=PackedStringArray("navReg") instance=ExtResource("3_wyt7w")]
+Max_health = 20
+navReg = NodePath("../../..")
+isObstacle = true
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="overworld/walls/HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+radius = 9.26
+height = 10.26
+vertices = PackedVector3Array(7, 0, 11, -6, 0, 10, -6, 0, -11, 7, 0, -10, 5.563379, 0, 7.923145)
+affect_navigation_mesh = true
+avoidance_enabled = false

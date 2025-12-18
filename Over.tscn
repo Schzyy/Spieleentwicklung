@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://tsq5swjmomxx"]
+
+[ext_resource type="Script" uid="uid://ccyl2wv80sh84" path="res://GameOver.cs" id="1_dssxg"]
+
+[node name="GameOver" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dssxg")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.77254903, 0.6431373, 0.2509804, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 283.0
+offset_top = 40.0
+offset_right = 892.0
+offset_bottom = 177.0
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 177.0
+offset_right = 1053.0
+offset_bottom = 454.0
+theme_override_font_sizes/font_size = 70
+text = "you couldnt protect
+ the Hive"
+horizontal_alignment = 1
+
+[node name="HomeButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 410.0
+offset_right = 941.7586
+offset_bottom = 583.0
+theme_override_font_sizes/font_size = 70
+text = "Return to Home"

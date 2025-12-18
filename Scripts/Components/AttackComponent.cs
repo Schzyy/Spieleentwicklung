@@ -18,7 +18,9 @@ public partial class AttackComponent : Node
     public override void _Process(double delta)
     {
         if (_cooldownTimer > 0)
+        {
             _cooldownTimer -= delta;
+        }
     }
 
     public void TryAttack(Node3D target)
@@ -36,6 +38,5 @@ public partial class AttackComponent : Node
         bullet.Init(dir);
 
         _cooldownTimer = attackCooldown;
-        GD.Print("Bullet fired from pool!");
     }
 }

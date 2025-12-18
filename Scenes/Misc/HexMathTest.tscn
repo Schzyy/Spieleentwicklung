@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh7i88hd0aavr"]
+
+[ext_resource type="Script" uid="uid://d15r1m5w4hdit" path="res://Scenes/Misc/HexMathTest.cs" id="1_kywmd"]
+
+[node name="HexMathTest" type="Node3D"]
+script = ExtResource("1_kywmd")

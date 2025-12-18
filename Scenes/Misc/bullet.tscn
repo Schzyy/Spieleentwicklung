@@ -6,7 +6,7 @@
 
 [sub_resource type="SphereMesh" id="SphereMesh_6vgvl"]
 
-[node name="Bullet" type="Area3D"]
+[node name="Bullet" type="Area3D" groups=["Damage"]]
 script = ExtResource("1_wx8rg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

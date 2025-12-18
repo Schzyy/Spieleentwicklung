@@ -2,8 +2,8 @@ using Godot;
 
 public partial class Bullet : Area3D
 {
-    [Export] public float Speed = 20f;
-    [Export] public float LifeTime = 3f;
+    [Export] public float Speed = 5f;
+    [Export] public float LifeTime = 1f;
 
     private Vector3 _direction;
     private float _lifeTimer;

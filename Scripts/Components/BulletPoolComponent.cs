@@ -12,7 +12,6 @@ public partial class BulletPoolComponent : Node
     {
         if (bulletScene == null)
         {
-            GD.PushError("BulletPool: Keine BulletScene gesetzt!");
             return;
         }
 
@@ -34,7 +33,6 @@ public partial class BulletPoolComponent : Node
                 return b;
         }
 
-        GD.Print("⚠️ BulletPool leer – evtl. Poolgröße erhöhen!");
         return null;
     }
 }

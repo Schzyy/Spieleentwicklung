@@ -1,0 +1,82 @@
+[gd_scene load_steps=3 format=3 uid="uid://dyv0ta2bi1xoe"]
+
+[ext_resource type="Script" uid="uid://ds2l1ef0n4hgq" path="res://HomeScreen.cs" id="1_hf3nf"]
+[ext_resource type="Script" uid="uid://jdrruesji3ob" path="res://LevelSelction.cs" id="2_maaha"]
+
+[node name="StartScreen" type="Control" node_paths=PackedStringArray("levelSelector")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_hf3nf")
+levelSelector = NodePath("LevelSelction")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.77254903, 0.6431373, 0.2509804, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 283.0
+offset_top = 40.0
+offset_right = 892.0
+offset_bottom = 177.0
+theme_override_font_sizes/font_size = 100
+text = "HiveDefense"
+
+[node name="MainSelection" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 175.0
+offset_right = 525.0
+offset_bottom = 625.0
+alignment = 1
+
+[node name="StartButton" type="Button" parent="MainSelection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Start"
+
+[node name="SettingsButton" type="Button" parent="MainSelection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Settings
+"
+
+[node name="QuitButton" type="Button" parent="MainSelection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Quit"
+
+[node name="LevelSelction" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 175.0
+offset_right = 1050.0
+offset_bottom = 575.0
+alignment = 1
+script = ExtResource("2_maaha")
+
+[node name="Tutorial" type="Button" parent="LevelSelction"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Tutorial"
+
+[node name="LevelOne" type="Button" parent="LevelSelction"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Level One"
+
+[node name="LevelTwo" type="Button" parent="LevelSelction"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Level Two
+"
+
+[node name="LevelThree" type="Button" parent="LevelSelction"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Level Three
+"

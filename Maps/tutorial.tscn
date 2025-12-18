@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://cvx4e55pk470m"]
+[gd_scene load_steps=19 format=3 uid="uid://cvx4e55pk470m"]
 
 [ext_resource type="Script" uid="uid://s20daxen2qiq" path="res://Scripts/Spawner.cs" id="1_mrjhh"]
 [ext_resource type="PackedScene" uid="uid://c17g3nqth1mvs" path="res://Scenes/Enemy/enemy.tscn" id="2_s1m74"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_sv7hm"]
 [ext_resource type="PackedScene" uid="uid://hoi4v81j7705" path="res://Attributes/CameraMovementComponent.tscn" id="4_s1m74"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_7u77a"]
@@ -83,6 +84,8 @@ shape = SubResource("BoxShape3D_mrjhh")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Navigation/Physical/BlockingWall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 mesh = SubResource("BoxMesh_mrjhh")
+
+[node name="HealthComponent" parent="Navigation/Physical/BlockingWall" instance=ExtResource("3_sv7hm")]
 
 [node name="OuterWall1" type="StaticBody3D" parent="Navigation/Physical"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
