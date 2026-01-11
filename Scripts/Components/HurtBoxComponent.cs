@@ -15,7 +15,6 @@ public partial class HurtBoxComponent : Area3D
 
     private void OnBodyEntered(Node3D body)
     {
-        GD.Print("hit " + body.Name);
         if (body.IsInGroup("Damage"))
         {
             healthComponent.takeDamage(10);
@@ -23,7 +22,6 @@ public partial class HurtBoxComponent : Area3D
     }
     private void OnAreaEntered(Area3D area)
     {
-        GD.Print("hit " + area.Name);
         {
             healthComponent.takeDamage(10);
         }

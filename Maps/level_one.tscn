@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cfvgplds2mais"]
+[gd_scene load_steps=24 format=3 uid="uid://cfvgplds2mais"]
 
 [ext_resource type="PackedScene" uid="uid://hoi4v81j7705" path="res://Attributes/CameraMovementComponent.tscn" id="2_fj3mn"]
 [ext_resource type="Script" uid="uid://s20daxen2qiq" path="res://Scripts/Spawner.cs" id="2_idw82"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c17g3nqth1mvs" path="res://Scenes/Enemy/enemy.tscn" id="3_idw82"]
 [ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="3_p734c"]
 [ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="6_aatkb"]
+[ext_resource type="Script" uid="uid://f01ia6db0xln" path="res://Scripts/turretPlacementSystem.cs" id="7_g0tl7"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_fj3mn"]
 vertices = PackedVector3Array(5.6000004, 0.5, 13.200001, 5.6000004, 0.5, 6.800001, -1.5999999, 0.5, 6.800001, -5.6, 0.5, 13.200001, -5.6, 0.5, -13.2, -5.6, 0.5, -6.7999997, 2.4000006, 0.5, -6, 5.6000004, 0.5, -13.2, -2.4, 0.5, 4.3999996, -5.6, 0.5, -3.5999994, 1.6000004, 0.5, -3.5999994, 5.6000004, 0.5, 3.6000004)
@@ -214,3 +215,7 @@ range = 5.0
 [node name="Turret4" parent="Turrets" instance=ExtResource("6_aatkb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 5)
 range = 5.0
+
+[node name="GameManager" type="Node3D" parent="."]
+script = ExtResource("7_g0tl7")
+TurretScene = ExtResource("6_aatkb")

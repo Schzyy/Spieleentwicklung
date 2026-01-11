@@ -13,11 +13,15 @@ public partial class Turret : Node3D
     private MeshInstance3D debugLineInstance;
     private ImmediateMesh debugLineMesh;
 
+    private AttackComponent attackComponent;
+
     public override void _Ready()
     {
         position = GlobalTransform.Origin;
         cannonHead = GetNode<MeshInstance3D>("CannonShape");
         bulletHole = cannonHead.GetNode<Node3D>("BulletPoint");
+        attackComponent = GetNode<AttackComponent>("AttackComponent");
+        GD.Print(attackComponent);
         debugLineMesh = new ImmediateMesh();
         debugLineInstance = new MeshInstance3D
         {
@@ -31,54 +35,65 @@ public partial class Turret : Node3D
         scout(delta);
     }
     private void scout(double delta)
+{
+    var spaceState = GetWorld3D().DirectSpaceState;
+    var sphereShape = new SphereShape3D
     {
-        var spaceState = GetWorld3D().DirectSpaceState;
-        var sphereShape = new SphereShape3D
+        Radius = range
+    };
+    
+    var query = new PhysicsShapeQueryParameters3D
+    {
+        Shape = sphereShape,
+        Transform = new Transform3D(Basis.Identity, GlobalPosition), 
+        CollideWithBodies = true,
+        CollideWithAreas = false, 
+    };
+    
+    var results = spaceState.IntersectShape(query, maxResults: 32);
+    
+    Node3D closestEnemy = null;
+    float closestDist = float.MaxValue;
+    
+    foreach (var result in results)
+    {
+        if (result.TryGetValue("collider", out var colliderObj))
         {
-            Radius = range
-        };
-
-        var query = new PhysicsShapeQueryParameters3D
-        {
-            Shape = sphereShape,
-            Transform = new Transform3D(Basis.Identity, position),
-            CollideWithBodies = true,
-            CollideWithAreas = true
-        };
-
-        var results = spaceState.IntersectShape(query, maxResults: 32);
-
-        Node3D closestEnemy = null;
-        float closestDist = float.MaxValue;
-
-        foreach (var result in results)
-        {
-            if (result.TryGetValue("collider", out var colliderObj))
+            var collider = colliderObj.AsGodotObject();
+            
+            if (collider is CollisionObject3D collisionObject)
             {
-                var collider = colliderObj.AsGodotObject() as Node3D;
-
-                if (collider != null && collider.IsInGroup("Enemy"))
+                Node checkNode = collisionObject;
+                
+                if (!checkNode.IsInGroup("Enemy") && checkNode.GetParent() != null)
                 {
-                    float dist = GlobalPosition.DistanceTo(collider.GlobalPosition);
+                    checkNode = checkNode.GetParent();
+                }
+                
+                if (checkNode.IsInGroup("Enemy") && checkNode is Node3D enemyNode)
+                {
+                    float dist = GlobalPosition.DistanceTo(enemyNode.GlobalPosition);
                     if (dist < closestDist)
                     {
                         closestDist = dist;
-                        closestEnemy = collider;
+                        closestEnemy = enemyNode;
                     }
                 }
             }
         }
-        DrawDebugLine(closestEnemy);
-
-        if (closestEnemy != null)
-        {
-            alignCannon(closestEnemy.GlobalPosition, delta);
-        }
     }
-
-    private void alignCannon(Vector3 enemyPos, double delta)
+    
+    DrawDebugLine(closestEnemy);
+    
+    if (closestEnemy != null)
     {
-        Vector3 toTarget = enemyPos - GlobalPosition;
+        alignCannon(closestEnemy, delta);
+    }
+}
+
+    private void alignCannon(Node3D enemy, double delta)
+    {
+        Vector3 toTarget = enemy.GlobalPosition - GlobalPosition;
         toTarget.Y = 0;
         if (toTarget.LengthSquared() < 0.0001f)
         {
@@ -90,7 +105,7 @@ public partial class Turret : Node3D
         targetBasis = targetBasis.Orthonormalized();
         Basis newBasis = currentBasis.Slerp(targetBasis, (float)(rotationSpeed * delta));
         GlobalTransform = new Transform3D(newBasis, GlobalTransform.Origin);
-
+        attackComponent.TryAttack(enemy);
     }
 
     private void shoot()

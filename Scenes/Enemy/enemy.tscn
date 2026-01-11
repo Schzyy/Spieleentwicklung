@@ -44,10 +44,10 @@ script = ExtResource("1_nvvbs")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_1f0kj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["Enemy"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_afpow")
 
-[node name="DetectionComponent" parent="." groups=["Breakable"] instance=ExtResource("2_2t2r4")]
+[node name="DetectionComponent" parent="." instance=ExtResource("2_2t2r4")]
 range = 4.0
 detectBreakable = true
 

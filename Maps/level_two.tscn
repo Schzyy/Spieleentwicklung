@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bn3et8iqu7g36"]
+[gd_scene load_steps=18 format=3 uid="uid://bn3et8iqu7g36"]
 
 [ext_resource type="Script" uid="uid://cvjq05icmyw3v" path="res://Scripts/LevelTwo.cs" id="1_7dcja"]
 [ext_resource type="PackedScene" uid="uid://hoi4v81j7705" path="res://Attributes/CameraMovementComponent.tscn" id="2_j431e"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://c17g3nqth1mvs" path="res://Scenes/Enemy/enemy.tscn" id="4_yuuh3"]
 [ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="6_77fsy"]
 [ext_resource type="Script" uid="uid://p2eup3blctp6" path="res://Maps/NavigationRegion.cs" id="6_lwike"]
+[ext_resource type="Script" uid="uid://f01ia6db0xln" path="res://Scripts/turretPlacementSystem.cs" id="8_ctdg5"]
+[ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="9_6167c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wyt7w"]
 size = Vector3(10, 0, 30)
@@ -111,9 +113,8 @@ shape = SubResource("BoxShape3D_lwike")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_ctdg5")
 
-[node name="HealthComponent" parent="overworld/walls/HurtBoxComponent" node_paths=PackedStringArray("navReg") instance=ExtResource("3_wyt7w")]
+[node name="HealthComponent" parent="overworld/walls/HurtBoxComponent" instance=ExtResource("3_wyt7w")]
 Max_health = 20
-navReg = NodePath("../../..")
 isObstacle = true
 
 [node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="overworld/walls/HurtBoxComponent"]
@@ -123,3 +124,7 @@ height = 10.26
 vertices = PackedVector3Array(7, 0, 11, -6, 0, 10, -6, 0, -11, 7, 0, -10, 5.563379, 0, 7.923145)
 affect_navigation_mesh = true
 avoidance_enabled = false
+
+[node name="GameManager" type="Node3D" parent="."]
+script = ExtResource("8_ctdg5")
+TurretScene = ExtResource("9_6167c")

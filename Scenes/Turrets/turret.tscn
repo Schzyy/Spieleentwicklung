@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dec1cf74vl45y"]
+[gd_scene load_steps=7 format=3 uid="uid://dec1cf74vl45y"]
 
 [ext_resource type="Script" uid="uid://dit3713gjyyxg" path="res://Scripts/Turret.cs" id="1_fcprl"]
-[ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_5e6tg"]
+[ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="3_4e353"]
+[ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="4_dgy8o"]
+[ext_resource type="PackedScene" uid="uid://bvq81idukajd3" path="res://Scenes/Misc/bullet.tscn" id="4_mllst"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_axnog"]
 top_radius = 0.4
@@ -11,7 +13,7 @@ height = 0.5
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fcprl"]
 height = 0.657959
 
-[node name="Turret" type="StaticBody3D"]
+[node name="Turret" type="StaticBody3D" groups=["Neutral"]]
 script = ExtResource("1_fcprl")
 range = 25.0
 rotationSpeed = 30.0
@@ -31,7 +33,10 @@ mesh = SubResource("CylinderMesh_axnog")
 [node name="BulletPoint" type="Node3D" parent="CannonShape"]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 1.4210855e-14, 1.0000001, 0, -0.28352022, 0)
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="AttackComponent" parent="." node_paths=PackedStringArray("muzzle") instance=ExtResource("4_dgy8o")]
+bulletPoolPath = NodePath("../BulletPoolComponent")
+muzzle = NodePath("../CannonShape/BulletPoint")
 
-[node name="DetectionComponent" parent="." instance=ExtResource("2_5e6tg")]
-range = 15.0
+[node name="BulletPoolComponent" parent="." instance=ExtResource("3_4e353")]
+bulletScene = ExtResource("4_mllst")
+speed = 20

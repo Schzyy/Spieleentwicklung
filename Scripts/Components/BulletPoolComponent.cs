@@ -5,6 +5,7 @@ public partial class BulletPoolComponent : Node
 {
     [Export] private PackedScene bulletScene;
     [Export] private int poolSize = 50;
+    [Export] private int speed = 5;
 
     private readonly List<Bullet> _bullets = new();
 
@@ -19,6 +20,7 @@ public partial class BulletPoolComponent : Node
         {
             var bullet = bulletScene.Instantiate<Bullet>();
             bullet.Visible = false;
+            bullet.Speed = speed;
             bullet.SetProcess(false);
             AddChild(bullet);
             _bullets.Add(bullet);

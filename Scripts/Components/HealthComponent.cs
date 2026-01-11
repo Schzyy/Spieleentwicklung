@@ -15,7 +15,7 @@ public partial class HealthComponent : Node3D
     {
 
         health = health - damage;
-        GD.Print("health " + health);
+        GD.Print(GetParent() + " " + health);
         if(health <= 0 && GetParent().Name == "Castle")
         {
             GetTree().CallDeferred(
@@ -25,7 +25,6 @@ public partial class HealthComponent : Node3D
         }
         if(health <= 0)
         {
-            GD.Print(GetParent().Name);
             GetParent().QueueFree();
         }
 
