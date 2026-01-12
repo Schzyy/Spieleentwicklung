@@ -28,8 +28,8 @@ public partial class turretPlacementSystem : Node3D
     private void CreatePreviewTurret()
     {
         // Create a preview instance
-        var turretInstance = TurretScene.Instantiate<Node3D>();
-        
+        var turretInstance = TurretScene.Instantiate<Turret>();
+        turretInstance.setInactive();
         _previewTurret = new Node3D();
         AddChild(_previewTurret);
         _previewTurret.AddChild(turretInstance);

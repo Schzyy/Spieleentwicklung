@@ -7,6 +7,7 @@ public partial class Turret : Node3D
     [Export] public float range = 10f;
     [Export] public float rotationSpeed = 3f;
 
+    private bool active = true;
     private Vector3 position;
     private MeshInstance3D cannonHead;
     private Node3D bulletHole;
@@ -21,7 +22,6 @@ public partial class Turret : Node3D
         cannonHead = GetNode<MeshInstance3D>("CannonShape");
         bulletHole = cannonHead.GetNode<Node3D>("BulletPoint");
         attackComponent = GetNode<AttackComponent>("AttackComponent");
-        GD.Print(attackComponent);
         debugLineMesh = new ImmediateMesh();
         debugLineInstance = new MeshInstance3D
         {
@@ -32,6 +32,10 @@ public partial class Turret : Node3D
 
     public override void _Process(double delta)
     {
+        if(active == false)
+        {
+            return;
+        }
         scout(delta);
     }
     private void scout(double delta)
@@ -108,11 +112,15 @@ public partial class Turret : Node3D
         attackComponent.TryAttack(enemy);
     }
 
-    private void shoot()
+    public void setActive()
     {
-        
+        active = true;
     }
 
+    public void setInactive()
+    {
+        active = false;
+    }
     private void DrawDebugLine(Node3D enemy)
     {
         debugLineMesh.ClearSurfaces();
