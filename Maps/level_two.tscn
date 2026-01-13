@@ -125,6 +125,7 @@ vertices = PackedVector3Array(7, 0, 11, -6, 0, 10, -6, 0, -11, 7, 0, -10, 5.5633
 affect_navigation_mesh = true
 avoidance_enabled = false
 
-[node name="GameManager" type="Node3D" parent="."]
+[node name="GameManager" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
 script = ExtResource("8_ctdg5")
 TurretScene = ExtResource("9_6167c")
+camera = NodePath("../Camera3D")

@@ -16,7 +16,7 @@ public partial class turretPlacementSystem : Node3D
     private Vector3 _placementPosition;
     
     public override void _Ready()
-    {
+    {        
         _camera = GetViewport().GetCamera3D();
         
         if (TurretScene != null)
@@ -27,22 +27,17 @@ public partial class turretPlacementSystem : Node3D
     
     private void CreatePreviewTurret()
     {
-        // Create a preview instance
         var turretInstance = TurretScene.Instantiate<Turret>();
         turretInstance.setInactive();
         _previewTurret = new Node3D();
         AddChild(_previewTurret);
         _previewTurret.AddChild(turretInstance);
-        
-        // Make it transparent/ghostly
         MakeTransparent(_previewTurret, ValidPlacementColor);
-        
         _previewTurret.Visible = false;
     }
     
     private void MakeTransparent(Node node, Color color)
     {
-        // Recursively find all MeshInstance3D nodes and make them transparent
         if (node is MeshInstance3D meshInstance)
         {
             var material = new StandardMaterial3D
@@ -64,7 +59,7 @@ public partial class turretPlacementSystem : Node3D
     {
         UpdatePlacementPreview();
         
-        if (Input.IsActionJustPressed("place_turret")) // You'll need to define this input action
+        if (Input.IsActionJustPressed("place_turret"))
         {
             TryPlaceTurret();
         }
@@ -77,8 +72,7 @@ public partial class turretPlacementSystem : Node3D
     
     public override void _Input(InputEvent @event)
     {
-        // Toggle placement mode with a key (e.g., "T" for turret)
-        if (Input.IsActionJustPressed("toggle_placement")) // Define this in project settings
+        if (Input.IsActionJustPressed("toggle_placement"))
         {
             _previewTurret.Visible = !_previewTurret.Visible;
         }
@@ -92,7 +86,6 @@ public partial class turretPlacementSystem : Node3D
         var viewport = GetViewport();
         var screenCenter = viewport.GetVisibleRect().Size / 2;
         
-        // Raycast from camera center
         var from = _camera.ProjectRayOrigin(screenCenter);
         var to = from + _camera.ProjectRayNormal(screenCenter) * MaxPlacementDistance;
         
@@ -103,11 +96,29 @@ public partial class turretPlacementSystem : Node3D
         
         if (result.Count > 0)
         {
-            _placementPosition = (Vector3)result["position"];
-            _previewTurret.GlobalPosition = _placementPosition;
+            Vector3 hitPosition = (Vector3)result["position"];
+            Vector3 hitNormal = (Vector3)result["normal"];
             
-            // Check if placement is valid (not overlapping with other turrets, etc.)
-            _canPlace = IsValidPlacement(_placementPosition);
+            // Check if the surface is flat enough (ground-like)
+            float normalDotUp = hitNormal.Dot(Vector3.Up);
+            bool isFlatSurface = normalDotUp > 0.8f; // Surface must be mostly horizontal
+            
+            if (isFlatSurface)
+            {
+                // Snap to ground level - do an additional downward raycast to be sure
+                Vector3 snapPosition = SnapToGround(hitPosition);
+                _placementPosition = snapPosition;
+                _previewTurret.GlobalPosition = _placementPosition;
+                
+                // Check if placement is valid (not overlapping with other turrets, etc.)
+                _canPlace = IsValidPlacement(_placementPosition);
+            }
+            else
+            {
+                // Not a valid ground surface (wall, ceiling, steep slope)
+                _canPlace = false;
+                _previewTurret.GlobalPosition = hitPosition; // Show where you're aiming but mark as invalid
+            }
             
             // Update color based on validity
             Color targetColor = _canPlace ? ValidPlacementColor : InvalidPlacementColor;
@@ -120,12 +131,25 @@ public partial class turretPlacementSystem : Node3D
         }
     }
     
+    private Vector3 SnapToGround(Vector3 position)
+    {
+        var spaceState = GetWorld3D().DirectSpaceState;
+        var from = position + Vector3.Up * 2f; // Start slightly above
+        var to = position + Vector3.Down * 10f; // Check below
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollisionMask = PlacementLayerMask;
+        var result = spaceState.IntersectRay(query);
+        if (result.Count > 0)
+        {
+            return (Vector3)result["position"];
+        }
+        return position;
+    }
+    
     private bool IsValidPlacement(Vector3 position)
     {
-        // Check if there's already a turret nearby
         var spaceState = GetWorld3D().DirectSpaceState;
         var sphereShape = new SphereShape3D { Radius = 2f }; // Minimum distance between turrets
-        
         var query = new PhysicsShapeQueryParameters3D
         {
             Shape = sphereShape,
@@ -133,9 +157,7 @@ public partial class turretPlacementSystem : Node3D
             CollideWithBodies = true,
             CollideWithAreas = true
         };
-        
         var results = spaceState.IntersectShape(query, maxResults: 10);
-        
         foreach (var result in results)
         {
             if (result.TryGetValue("collider", out var colliderObj))
@@ -143,29 +165,20 @@ public partial class turretPlacementSystem : Node3D
                 var collider = colliderObj.AsGodotObject();
                 if (collider is Node node && node.IsInGroup("Turret"))
                 {
-                    return false; // Too close to another turret
+                    return false;
                 }
             }
         }
-        
         return true;
     }
     
     private void TryPlaceTurret()
     {
         if (!_previewTurret.Visible || !_canPlace) return;
-        
-        // Instantiate the actual turret
         var turret = TurretScene.Instantiate<Node3D>();
         GetTree().Root.AddChild(turret);
         turret.GlobalPosition = _placementPosition;
-        
-        // Add to turret group for collision detection
         turret.AddToGroup("Turret");
-        
         GD.Print($"Turret placed at {_placementPosition}");
-        
-        // Optional: Hide preview after placement
-        // _previewTurret.Visible = false;
     }
 }

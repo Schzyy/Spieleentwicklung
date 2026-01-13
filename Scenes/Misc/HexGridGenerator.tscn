@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bi38vgc8kyrxs"]
-
-[ext_resource type="Script" uid="uid://brndo6lqrpt6" path="res://Scenes/Misc/HexGridGenerator.cs" id="1_d65xl"]
-
-[node name="HexGridGenerator" type="Node3D"]
-script = ExtResource("1_d65xl")

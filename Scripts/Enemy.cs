@@ -19,6 +19,23 @@ public partial class Enemy : CharacterBody3D
         _path.TargetReached += OnTargetReached;
     }
 
+    public override void _Process(double delta)
+    {
+        FaceTarget(goal.GlobalPosition);
+    }
+
+
+    public void FaceTarget(Vector3 targetPosition)
+    {
+        Vector3 direction = targetPosition - GlobalPosition;
+        direction.Y = 0; // Prevent tilting up/down
+
+        if (direction.LengthSquared() < 0.001f)
+            return;
+
+        LookAt(GlobalPosition + direction, Vector3.Up);
+    }
+
     private void OnTargetDetected(Node3D target)
     {
         _path.MoveTo(target);

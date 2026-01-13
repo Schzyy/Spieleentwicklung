@@ -13,7 +13,7 @@ public partial class PathComponent : Node3D
     private NavigationAgent3D _agent;
     private CharacterBody3D _owner;
     private Node3D _mainTarget;
-    private Node3D _target;
+    public Node3D _target;
 
     private Vector3 _currentWanderOffset = Vector3.Zero;
     private double _timeSinceLastWander = 0;
@@ -39,11 +39,9 @@ public partial class PathComponent : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
-        // SAFETY CHECK
         if (_target != null && !IsInstanceValid(_target))
             _target = null;
 
-        // FALLBACK TO MAIN TARGET
         if (_target == null)
         {
             _target = _mainTarget;

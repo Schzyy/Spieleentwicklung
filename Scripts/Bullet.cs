@@ -36,7 +36,7 @@ public partial class Bullet : Area3D
     {
         _active = false;
         Visible = false;
-        Monitoring = false;
+        SetDeferred("Monitoring", false);
         SetPhysicsProcess(false);
         SetProcess(false);
     }
