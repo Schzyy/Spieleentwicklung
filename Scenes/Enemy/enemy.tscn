@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c17g3nqth1mvs"]
+[gd_scene load_steps=15 format=3 uid="uid://c17g3nqth1mvs"]
 
 [ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_nvvbs"]
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_2t2r4"]
@@ -6,8 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="4_dmwl5"]
 [ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="5_gx76c"]
 [ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="6_pqgp3"]
-[ext_resource type="Script" uid="uid://cw83b4upi1h3w" path="res://Scenes/Enemy/HealthBar.cs" id="8_4ad2a"]
+[ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="8_4ad2a"]
 [ext_resource type="PackedScene" uid="uid://tmtv1ftmiv33" path="res://Scenes/Misc/bullet.tscn" id="8_kiqm3"]
+[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="9_kiqm3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hghv2"]
 albedo_color = Color(0.015686275, 1, 1, 1)
@@ -24,23 +25,11 @@ height = 0.6
 [sub_resource type="BoxMesh" id="BoxMesh_pqgp3"]
 size = Vector3(0.25, 0.05, 0.2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kiqm3"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_6j3ko"]
-material = SubResource("StandardMaterial3D_kiqm3")
-size = Vector2(1, 0.2)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2chwy"]
-albedo_color = Color(0, 1, 0, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_beese"]
-material = SubResource("StandardMaterial3D_2chwy")
-size = Vector2(1, 0.2)
+[sub_resource type="SphereShape3D" id="SphereShape3D_6j3ko"]
+radius = 0.3180313
 
 [node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
-collision_layer = 10
-collision_mask = 0
+collision_layer = 2
 script = ExtResource("1_nvvbs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -53,7 +42,8 @@ shape = SubResource("CapsuleShape3D_afpow")
 range = 4.0
 detectBreakable = true
 
-[node name="HealthComponent" parent="." instance=ExtResource("3_2t2r4")]
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("hBar") instance=ExtResource("3_2t2r4")]
+hBar = NodePath("../HealthBar")
 
 [node name="PathComponent" parent="." instance=ExtResource("4_dmwl5")]
 stopDistance = 2.0
@@ -70,26 +60,20 @@ bulletPoolPath = NodePath("../BulletPoolComponent")
 muzzle = NodePath("../Muzzle")
 
 [node name="Muzzle" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91767836, 0.32782686)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16666305, -0.5220413)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0010056496, 0.17957568, -0.2325063)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0010056496, 0.17957568, -0.2077168)
 mesh = SubResource("BoxMesh_pqgp3")
-
-[node name="HealthBar" type="Node3D" parent="." node_paths=PackedStringArray("enemy", "foreground", "background")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-script = ExtResource("8_4ad2a")
-enemy = NodePath("..")
-foreground = NodePath("Foreground")
-background = NodePath("Background")
-
-[node name="Background" type="MeshInstance3D" parent="HealthBar"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-mesh = SubResource("PlaneMesh_6j3ko")
-
-[node name="Foreground" type="MeshInstance3D" parent="HealthBar"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-mesh = SubResource("PlaneMesh_beese")
 
 [node name="BulletPoolComponent" parent="." instance=ExtResource("6_pqgp3")]
 bulletScene = ExtResource("8_kiqm3")
+
+[node name="HealthBar" parent="." instance=ExtResource("8_4ad2a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("healthComponent") instance=ExtResource("9_kiqm3")]
+healthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBoxComponent"]
+shape = SubResource("SphereShape3D_6j3ko")

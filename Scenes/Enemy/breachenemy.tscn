@@ -1,0 +1,73 @@
+[gd_scene load_steps=13 format=3 uid="uid://bq7j7cnga04bu"]
+
+[ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="1_ldct8"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="2_1mdan"]
+[ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="3_f5dfg"]
+[ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="4_pcm01"]
+[ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="5_minpd"]
+[ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="6_23qr8"]
+[ext_resource type="PackedScene" uid="uid://tmtv1ftmiv33" path="res://Scenes/Misc/bullet.tscn" id="7_1mdan"]
+[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="7_voqjb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwfb5"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_65aqq"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pnbhv"]
+top_radius = 0.1
+bottom_radius = 0.4
+height = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jx4ap"]
+size = Vector3(1, 0.9637451, 2.197876)
+
+[node name="Node3D" type="CharacterBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_wwfb5")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_65aqq")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(-1, 8.742278e-08, -3.821371e-15, 0, -4.371139e-08, -1, -8.742278e-08, -1, 4.371139e-08, 0, 0.5, -1.410182)
+mesh = SubResource("CylinderMesh_pnbhv")
+
+[node name="DetectionComponent" parent="." instance=ExtResource("1_ldct8")]
+range = 2.0
+
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("hBar") instance=ExtResource("2_1mdan")]
+Max_health = 200
+hBar = NodePath("../HealthBar")
+
+[node name="HealthBar" parent="." instance=ExtResource("3_f5dfg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3241665, 0)
+
+[node name="PathComponent" parent="." instance=ExtResource("4_pcm01")]
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="PathComponent"]
+
+[node name="AttackComponent" parent="." node_paths=PackedStringArray("muzzle") instance=ExtResource("5_minpd")]
+bulletPoolPath = NodePath("../BulletPoolComponent")
+muzzle = NodePath("../Muzzle")
+
+[node name="Muzzle" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52048707, -1.8720323)
+
+[node name="BulletPoolComponent" parent="." instance=ExtResource("6_23qr8")]
+bulletScene = ExtResource("7_1mdan")
+speed = 1
+
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("healthComponent") instance=ExtResource("7_voqjb")]
+healthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5734253, -0.089538574)
+shape = SubResource("BoxShape3D_jx4ap")

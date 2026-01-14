@@ -101,12 +101,15 @@ public partial class turretPlacementSystem : Node3D
             
             // Check if the surface is flat enough (ground-like)
             float normalDotUp = hitNormal.Dot(Vector3.Up);
-            bool isFlatSurface = normalDotUp > 0.8f; // Surface must be mostly horizontal
+            bool isFlatSurface = normalDotUp > 0.8f; 
             
             if (isFlatSurface)
             {
                 // Snap to ground level - do an additional downward raycast to be sure
                 Vector3 snapPosition = SnapToGround(hitPosition);
+                snapPosition = SnapToGrid(snapPosition);
+                GD.Print(snapPosition);
+
                 _placementPosition = snapPosition;
                 _previewTurret.GlobalPosition = _placementPosition;
                 
@@ -134,17 +137,26 @@ public partial class turretPlacementSystem : Node3D
     private Vector3 SnapToGround(Vector3 position)
     {
         var spaceState = GetWorld3D().DirectSpaceState;
-        var from = position + Vector3.Up * 2f; // Start slightly above
-        var to = position + Vector3.Down * 10f; // Check below
+        var from = position + Vector3.Up * 2f; 
+        var to = position + Vector3.Down * 10f; 
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollisionMask = PlacementLayerMask;
         var result = spaceState.IntersectRay(query);
         if (result.Count > 0)
         {
+
             return (Vector3)result["position"];
         }
         return position;
     }
+    private Vector3 SnapToGrid(Vector3 position)
+{
+        return new Vector3(
+            Mathf.Round(position.X)+0.5f,
+            Mathf.Round(position.Y),
+            Mathf.Round(position.Z)
+    );
+}
     
     private bool IsValidPlacement(Vector3 position)
     {
@@ -163,7 +175,7 @@ public partial class turretPlacementSystem : Node3D
             if (result.TryGetValue("collider", out var colliderObj))
             {
                 var collider = colliderObj.AsGodotObject();
-                if (collider is Node node && node.IsInGroup("Turret"))
+                if (collider is Node node && node.IsInGroup("Neutral"))
                 {
                     return false;
                 }

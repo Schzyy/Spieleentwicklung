@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cfvgplds2mais"]
+[gd_scene load_steps=28 format=3 uid="uid://cfvgplds2mais"]
 
 [ext_resource type="PackedScene" uid="uid://df0spahjyw717" path="res://Scenes/Misc/camera.tscn" id="2_g0tl7"]
 [ext_resource type="Script" uid="uid://s20daxen2qiq" path="res://Scripts/Spawner.cs" id="2_idw82"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="3_p734c"]
 [ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="6_aatkb"]
 [ext_resource type="Script" uid="uid://f01ia6db0xln" path="res://Scripts/turretPlacementSystem.cs" id="7_g0tl7"]
+[ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="8_58kgu"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_fj3mn"]
 vertices = PackedVector3Array(5.6000004, 0.5, 13.200001, 5.6000004, 0.5, 6.800001, -1.5999999, 0.5, 6.800001, -5.6, 0.5, 13.200001, -5.6, 0.5, -13.2, -5.6, 0.5, -6.7999997, 2.4000006, 0.5, -6, 5.6000004, 0.5, -13.2, -2.4, 0.5, 4.3999996, -5.6, 0.5, -3.5999994, 1.6000004, 0.5, -3.5999994, 5.6000004, 0.5, 3.6000004)
@@ -19,6 +20,10 @@ size = Vector3(16, 1, 28)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fj3mn"]
 size = Vector2(16, 28)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_58kgu"]
+metallic = 0.45
+normal_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fj3mn"]
 size = Vector3(1, 1, 28)
@@ -76,9 +81,10 @@ script = ExtResource("7_g0tl7")
 TurretScene = ExtResource("6_aatkb")
 
 [node name="Camera" parent="." instance=ExtResource("2_g0tl7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 4, 0)
 shadow_enabled = true
 
 [node name="StaticObstacles" type="NavigationRegion3D" parent="."]
@@ -93,6 +99,7 @@ shape = SubResource("BoxShape3D_retd1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticObstacles/Ground"]
 mesh = SubResource("PlaneMesh_fj3mn")
+surface_material_override/0 = SubResource("StandardMaterial3D_58kgu")
 
 [node name="staticWalls" type="Node3D" parent="StaticObstacles"]
 
@@ -153,9 +160,10 @@ skeleton = NodePath("")
 [node name="pathPoint" type="Marker3D" parent="StaticObstacles/Castle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 10)
 
-[node name="HealthComponent" parent="StaticObstacles/Castle" instance=ExtResource("2_p0ypl")]
+[node name="HealthComponent" parent="StaticObstacles/Castle" node_paths=PackedStringArray("hBar") instance=ExtResource("2_p0ypl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 10)
-Max_health = 40
+Max_health = 120
+hBar = NodePath("../HealthBar")
 
 [node name="HurtBoxComponent" parent="StaticObstacles/Castle" node_paths=PackedStringArray("healthComponent") instance=ExtResource("3_p734c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 10)
@@ -174,6 +182,9 @@ collision_mask = 6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -1)
 shape = SubResource("CylinderShape3D_g0tl7")
 
+[node name="HealthBar" parent="StaticObstacles/Castle" instance=ExtResource("8_58kgu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3413205, 2.8391476, 9.981813)
+
 [node name="EnemySpawn" type="Node3D" parent="." node_paths=PackedStringArray("timer", "castle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 script = ExtResource("2_idw82")
@@ -183,7 +194,7 @@ castle = NodePath("../StaticObstacles/Castle/pathPoint")
 boxSize = Vector3(7, 1, 2)
 
 [node name="Timer" type="Timer" parent="EnemySpawn"]
-one_shot = true
+wait_time = 4.0
 
 [node name="BreakableWalls" type="Node3D" parent="." groups=["Breakable"]]
 
@@ -200,8 +211,9 @@ healthComponent = NodePath("../HealthComponent")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_aatkb")
 
-[node name="HealthComponent" parent="BreakableWalls/breakWall1" instance=ExtResource("2_p0ypl")]
-Max_health = 20
+[node name="HealthComponent" parent="BreakableWalls/breakWall1" node_paths=PackedStringArray("hBar") instance=ExtResource("2_p0ypl")]
+Max_health = 80
+hBar = NodePath("../HealthBar")
 
 [node name="Visuals" type="Node3D" parent="BreakableWalls/breakWall1"]
 
@@ -217,6 +229,9 @@ collision_mask = 6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_g0tl7")
 
+[node name="HealthBar" parent="BreakableWalls/breakWall1" instance=ExtResource("8_58kgu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+
 [node name="breakWall2" type="Node3D" parent="BreakableWalls" groups=["Breakable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 5)
 
@@ -230,8 +245,9 @@ healthComponent = NodePath("../HealthComponent")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_aatkb")
 
-[node name="HealthComponent" parent="BreakableWalls/breakWall2" instance=ExtResource("2_p0ypl")]
-Max_health = 20
+[node name="HealthComponent" parent="BreakableWalls/breakWall2" node_paths=PackedStringArray("hBar") instance=ExtResource("2_p0ypl")]
+Max_health = 80
+hBar = NodePath("../HealthBar")
 
 [node name="Visuals" type="Node3D" parent="BreakableWalls/breakWall2"]
 
@@ -247,4 +263,39 @@ collision_mask = 6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_g0tl7")
 
+[node name="HealthBar" parent="BreakableWalls/breakWall2" instance=ExtResource("8_58kgu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+
 [node name="Turrets" type="Node3D" parent="."]
+
+[node name="Turret" parent="Turrets" instance=ExtResource("6_aatkb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4521723, 1, -10)
+
+[node name="breakWall2" type="Node3D" parent="." groups=["Breakable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 5)
+metadata/_edit_group_ = true
+
+[node name="HurtBoxComponent" parent="breakWall2" node_paths=PackedStringArray("healthComponent") groups=["Breakable"] instance=ExtResource("3_p734c")]
+collision_layer = 32
+collision_mask = 0
+healthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="breakWall2/HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_aatkb")
+
+[node name="HealthComponent" parent="breakWall2" instance=ExtResource("2_p0ypl")]
+Max_health = 20
+
+[node name="Visuals" type="Node3D" parent="breakWall2"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="breakWall2/Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_58kgu")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="breakWall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="breakWall2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_g0tl7")
