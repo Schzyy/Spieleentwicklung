@@ -83,9 +83,7 @@ place_turret={
 
 [layer_names]
 
-3d_physics/layer_1="Floor"
-3d_physics/layer_2="Walls"
-3d_physics/layer_3="Enemy"
-3d_physics/layer_4="Turret"
-3d_physics/layer_5="Bullet"
-3d_physics/layer_6="Breakable"
+3d_physics/layer_1="World"
+3d_physics/layer_2="Enemy"
+3d_physics/layer_3="Projectile"
+3d_physics/layer_4="HurtBox"

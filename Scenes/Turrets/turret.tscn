@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dit3713gjyyxg" path="res://Scripts/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="3_4e353"]
 [ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="4_dgy8o"]
-[ext_resource type="PackedScene" uid="uid://bvq81idukajd3" path="res://Scenes/Misc/bullet.tscn" id="4_mllst"]
+[ext_resource type="PackedScene" uid="uid://tmtv1ftmiv33" path="res://Scenes/Misc/bullet.tscn" id="4_mllst"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_axnog"]
 top_radius = 0.4

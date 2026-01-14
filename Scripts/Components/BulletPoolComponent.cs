@@ -21,6 +21,7 @@ public partial class BulletPoolComponent : Node
             var bullet = bulletScene.Instantiate<Bullet>();
             bullet.Visible = false;
             bullet.Speed = speed;
+            bullet.Monitoring = false;
             bullet.SetProcess(false);
             AddChild(bullet);
             _bullets.Add(bullet);

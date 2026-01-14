@@ -27,7 +27,7 @@ public partial class Spawner : Node3D
         _boxShape.Size = boxSize;
         var timer = GetNode<Timer>("Timer");
         timer.Timeout += SpawnEnemy;
-        timer.WaitTime = 10.0f;
+        timer.WaitTime = 1.0f;
         timer.Start();
     }
 

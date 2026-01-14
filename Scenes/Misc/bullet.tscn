@@ -10,8 +10,10 @@ radius = 0.2
 height = 0.4
 
 [node name="Bullet" type="Area3D" groups=["Damage"]]
-collision_layer = 16
-collision_mask = 47
+collision_layer = 4
+collision_mask = 9
+monitoring = false
+monitorable = false
 script = ExtResource("1_wx8rg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

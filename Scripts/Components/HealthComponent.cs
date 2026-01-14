@@ -5,7 +5,7 @@ public partial class HealthComponent : Node3D
 {
     [Export] public int Max_health = 100;
     public int health;
-    [Export] public bool isObstacle = false;
+    private bool _isDead = false;
 
     public override void _Ready()
     {
@@ -13,20 +13,19 @@ public partial class HealthComponent : Node3D
     }
     public void takeDamage(int damage)
     {
-
         health = health - damage;
-        GD.Print(GetParent() + " " + health);
         if(health <= 0 && GetParent().Name == "Castle")
         {
-            GetTree().CallDeferred(
-                SceneTree.MethodName.ChangeSceneToFile,
-                "res://Over.tscn"
-            );
+            GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, "res://Over.tscn");
         }
         if(health <= 0)
         {
-            GetParent().QueueFree();
+            _isDead = true;
+            Die();
         }
-
+    }
+    private void Die()
+    {
+        GetParent().QueueFree();
     }
 }

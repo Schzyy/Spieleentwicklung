@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c17g3nqth1mvs"]
+[gd_scene load_steps=17 format=3 uid="uid://c17g3nqth1mvs"]
 
 [ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_nvvbs"]
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_2t2r4"]
@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="4_dmwl5"]
 [ext_resource type="PackedScene" uid="uid://dlcck0hj6papy" path="res://Attributes/AttackComponent.tscn" id="5_gx76c"]
 [ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="6_pqgp3"]
-[ext_resource type="Script" uid="uid://d4dxby2rcptju" path="res://Scripts/Bullet.cs" id="7_4ad2a"]
 [ext_resource type="Script" uid="uid://cw83b4upi1h3w" path="res://Scenes/Enemy/HealthBar.cs" id="8_4ad2a"]
+[ext_resource type="PackedScene" uid="uid://tmtv1ftmiv33" path="res://Scenes/Misc/bullet.tscn" id="8_kiqm3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hghv2"]
 albedo_color = Color(0.015686275, 1, 1, 1)
@@ -20,26 +20,6 @@ height = 0.6
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_afpow"]
 radius = 0.3
 height = 0.6
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_j4gul"]
-radius = 0.2
-
-[sub_resource type="SphereMesh" id="SphereMesh_6vgvl"]
-radius = 0.2
-height = 0.4
-
-[sub_resource type="PackedScene" id="PackedScene_kiqm3"]
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"names": PackedStringArray("Bullet", "Area3D", "Damage", "script", "CollisionShape3D", "CollisionShape3D", "shape", "MeshInstance3D", "MeshInstance3D", "mesh"),
-"node_count": 3,
-"node_paths": [NodePath("."), NodePath(".")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 3, 0, 1, 2, 1073741824, 0, 5, 4, -1, 1, 6, 1, 0, 1073741825, 0, 8, 7, -1, 1, 9, 2, 0),
-"variants": [ExtResource("7_4ad2a"), SubResource("SphereShape3D_j4gul"), SubResource("SphereMesh_6vgvl")],
-"version": 3
-}
 
 [sub_resource type="BoxMesh" id="BoxMesh_pqgp3"]
 size = Vector3(0.25, 0.05, 0.2)
@@ -59,8 +39,8 @@ material = SubResource("StandardMaterial3D_2chwy")
 size = Vector2(1, 0.2)
 
 [node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
-collision_layer = 4
-collision_mask = 63
+collision_layer = 10
+collision_mask = 0
 script = ExtResource("1_nvvbs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -89,14 +69,11 @@ debug_enabled = true
 bulletPoolPath = NodePath("../BulletPoolComponent")
 muzzle = NodePath("../Muzzle")
 
-[node name="BulletPoolComponent" parent="." instance=ExtResource("6_pqgp3")]
-bulletScene = SubResource("PackedScene_kiqm3")
-
 [node name="Muzzle" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91767836, 0.32782686)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0010056496, 0.17957568, 0.16160232)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0010056496, 0.17957568, -0.2325063)
 mesh = SubResource("BoxMesh_pqgp3")
 
 [node name="HealthBar" type="Node3D" parent="." node_paths=PackedStringArray("enemy", "foreground", "background")]
@@ -113,3 +90,6 @@ mesh = SubResource("PlaneMesh_6j3ko")
 [node name="Foreground" type="MeshInstance3D" parent="HealthBar"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 mesh = SubResource("PlaneMesh_beese")
+
+[node name="BulletPoolComponent" parent="." instance=ExtResource("6_pqgp3")]
+bulletScene = ExtResource("8_kiqm3")

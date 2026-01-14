@@ -21,6 +21,10 @@ public partial class Enemy : CharacterBody3D
 
     public override void _Process(double delta)
     {
+        if(goal == null)
+        {
+            return;
+        }
         FaceTarget(goal.GlobalPosition);
     }
 
@@ -28,10 +32,12 @@ public partial class Enemy : CharacterBody3D
     public void FaceTarget(Vector3 targetPosition)
     {
         Vector3 direction = targetPosition - GlobalPosition;
-        direction.Y = 0; // Prevent tilting up/down
+        direction.Y = 0; 
 
         if (direction.LengthSquared() < 0.001f)
+        {
             return;
+        }
 
         LookAt(GlobalPosition + direction, Vector3.Up);
     }
