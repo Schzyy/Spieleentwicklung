@@ -1,0 +1,54 @@
+[gd_scene load_steps=11 format=3 uid="uid://d2ahx8se2vfxm"]
+
+[ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="1_4humj"]
+[ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_vpsq7"]
+[ext_resource type="PackedScene" uid="uid://d3kfa862hqiyo" path="res://Attributes/evaluateComponent.tscn" id="2_vpsq7"]
+[ext_resource type="PackedScene" uid="uid://o5ylnx6wmjmx" path="res://Attributes/ValueComponent.tscn" id="3_m853d"]
+[ext_resource type="PackedScene" uid="uid://dhr6sadpd0bai" path="res://Attributes/TargetComponent.tscn" id="4_ik78p"]
+[ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="5_j3aya"]
+[ext_resource type="PackedScene" uid="uid://bou2ogpy3om7f" path="res://Attributes/OrientationComponent.tscn" id="6_qaiqw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lkbds"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vpsq7"]
+height = 0.001
+radius = 8.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_vpsq7"]
+
+[node name="TestEnemy" type="CharacterBody3D" node_paths=PackedStringArray("_detection", "_evaluate", "_value", "_target", "_path", "_orientation")]
+script = ExtResource("1_vpsq7")
+_detection = NodePath("DetectionComponent")
+_evaluate = NodePath("EvaluateComponent")
+_value = NodePath("ValueComponent")
+_target = NodePath("TargetComponent")
+_path = NodePath("PathComponent")
+_orientation = NodePath("OrientationComponent")
+
+[node name="EvaluateComponent" parent="." node_paths=PackedStringArray("_selfValue") instance=ExtResource("2_vpsq7")]
+_selfValue = NodePath("../ValueComponent")
+
+[node name="ValueComponent" parent="." instance=ExtResource("3_m853d")]
+targetValue = 50
+
+[node name="TargetComponent" parent="." instance=ExtResource("4_ik78p")]
+
+[node name="PathComponent" parent="." instance=ExtResource("5_j3aya")]
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="PathComponent"]
+
+[node name="OrientationComponent" parent="." node_paths=PackedStringArray("_owner") instance=ExtResource("6_qaiqw")]
+_owner = NodePath("..")
+_includeY = true
+_rotationSpeed = 50.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_lkbds")
+
+[node name="DetectionComponent" parent="." instance=ExtResource("1_4humj")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionComponent"]
+shape = SubResource("CylinderShape3D_vpsq7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_vpsq7")

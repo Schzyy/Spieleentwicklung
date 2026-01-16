@@ -269,33 +269,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 [node name="Turrets" type="Node3D" parent="."]
 
 [node name="Turret" parent="Turrets" instance=ExtResource("6_aatkb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4521723, 1, -10)
-
-[node name="breakWall2" type="Node3D" parent="." groups=["Breakable"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 5)
-metadata/_edit_group_ = true
-
-[node name="HurtBoxComponent" parent="breakWall2" node_paths=PackedStringArray("healthComponent") groups=["Breakable"] instance=ExtResource("3_p734c")]
-collision_layer = 32
-collision_mask = 0
-healthComponent = NodePath("../HealthComponent")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="breakWall2/HurtBoxComponent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("BoxShape3D_aatkb")
-
-[node name="HealthComponent" parent="breakWall2" instance=ExtResource("2_p0ypl")]
-Max_health = 20
-
-[node name="Visuals" type="Node3D" parent="breakWall2"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="breakWall2/Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("BoxMesh_58kgu")
-skeleton = NodePath("")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="breakWall2"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="breakWall2/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("BoxShape3D_g0tl7")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.056158, 0.8952975, 0)

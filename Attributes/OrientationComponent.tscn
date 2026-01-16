@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bou2ogpy3om7f"]
+
+[ext_resource type="Script" uid="uid://cm5p8q3qslfn" path="res://Scripts/Components/OrientationComponent.cs" id="1_tga8h"]
+
+[node name="OrientationComponent" type="Node3D"]
+script = ExtResource("1_tga8h")

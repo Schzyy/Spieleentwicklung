@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://o5ylnx6wmjmx"]
+
+[ext_resource type="Script" uid="uid://cyvbn7pd4355p" path="res://Scripts/Components/ValueComponent.cs" id="1_sa0s7"]
+
+[node name="ValueComponent" type="Node3D"]
+script = ExtResource("1_sa0s7")

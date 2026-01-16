@@ -27,7 +27,7 @@ public partial class Spawner : Node3D
         _boxShape.Size = boxSize;
         var timer = GetNode<Timer>("Timer");
         timer.Timeout += SpawnEnemy;
-        timer.WaitTime = 4.0f;
+        timer.WaitTime = 8.0f;
         timer.Start();
     }
 
@@ -37,7 +37,6 @@ public partial class Spawner : Node3D
         Enemy ene = (Enemy)EnemyScene.Instantiate();
         ene._Ready();
         AddChild(ene);
-        ene.setMainTarget(castle);
         ene.GlobalTransform = new Transform3D(ene.GlobalTransform.Basis, spawnpoint);
     }
     private Vector3 getRandomPointInBox()
