@@ -5,11 +5,12 @@ public partial class PathComponent : Node3D
 {
     public event Action<Node3D> TargetReached;
     
-    [Export] private float stopDistance = 1.5f;
+    [Export] private float stopDistance = 0;
     [Export] private float moveSpeed = 3f;
     [Export] private float wanderRadius = 0.5f;
     [Export] private float wanderUpdateTime = 0.3f;
-    [Export] private Marker3D _mainTarget;
+    private Node3D _mainTarget;
+    public Node3D mainTarget => _mainTarget;
     private NavigationAgent3D _agent;
     private CharacterBody3D _owner;
     public Node3D _target;
@@ -23,6 +24,7 @@ public partial class PathComponent : Node3D
     {
         _owner = GetParent<CharacterBody3D>();
         _agent = GetNode<NavigationAgent3D>("NavigationAgent3D");
+        _mainTarget = setMainTarget();
     }
     
     public void MoveTo(Node3D target)
@@ -31,10 +33,14 @@ public partial class PathComponent : Node3D
         if (IsInstanceValid(_target))
             _agent.TargetPosition = _target.GlobalPosition;
     }
+    public Node3D setMainTarget()
+    {
+        var castle = GetTree().GetFirstNodeInGroup("main_target") as Node3D;
+        return castle;
+    }
     
     public override void _PhysicsProcess(double delta)
     {
-        GD.Print("happens " + _target);
         if (_target != null && !IsInstanceValid(_target))
             _target = null;
             
@@ -47,7 +53,7 @@ public partial class PathComponent : Node3D
                 return;
             }
         }
-        GD.Print("managed to bypass nulls");
+
         _agent.TargetPosition = _target.GlobalPosition;
         
         float distanceToTarget = _owner.GlobalPosition.DistanceTo(_target.GlobalPosition);

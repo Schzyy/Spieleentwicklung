@@ -1,10 +1,11 @@
-[gd_scene load_steps=27 format=3 uid="uid://bn3et8iqu7g36"]
+[gd_scene load_steps=28 format=3 uid="uid://bn3et8iqu7g36"]
 
 [ext_resource type="PackedScene" uid="uid://df0spahjyw717" path="res://Scenes/Misc/camera.tscn" id="3_lwike"]
 [ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_wyt7w"]
 [ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="6_77fsy"]
 [ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="6_ctdg5"]
 [ext_resource type="PackedScene" uid="uid://d2ahx8se2vfxm" path="res://test_enemy.tscn" id="7_6167c"]
+[ext_resource type="PackedScene" uid="uid://o5ylnx6wmjmx" path="res://Attributes/ValueComponent.tscn" id="7_ctdg5"]
 [ext_resource type="Script" uid="uid://f01ia6db0xln" path="res://Scripts/turretPlacementSystem.cs" id="8_ctdg5"]
 [ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="9_6167c"]
 
@@ -156,7 +157,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 10)
 mesh = SubResource("CylinderMesh_idw82")
 skeleton = NodePath("")
 
-[node name="pathPoint" type="Marker3D" parent="StaticObstacles/Castle"]
+[node name="pathPoint" type="Marker3D" parent="StaticObstacles/Castle" groups=["main_target"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 10)
 
 [node name="HealthComponent" parent="StaticObstacles/Castle" node_paths=PackedStringArray("hBar") instance=ExtResource("3_wyt7w")]
@@ -220,6 +221,9 @@ shape = SubResource("BoxShape3D_g0tl7")
 [node name="HealthBar" parent="BreakableWalls/breakWall1" instance=ExtResource("6_ctdg5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 
+[node name="ValueComponent" parent="BreakableWalls/breakWall1" instance=ExtResource("7_ctdg5")]
+targetValue = 1000
+
 [node name="breakWall2" type="Node3D" parent="BreakableWalls" groups=["Breakable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 5)
 
@@ -260,6 +264,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.056158, 0.8952975, 0)
 
 [node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
 [node name="TestEnemy" parent="Node3D" instance=ExtResource("7_6167c")]

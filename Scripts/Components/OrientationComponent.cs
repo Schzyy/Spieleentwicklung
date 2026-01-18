@@ -1,35 +1,50 @@
 using Godot;
 using System;
-
 public partial class OrientationComponent : Node3D
 {
-    [Export] private Node3D _owner;
     [Export] private bool _includeY = false;
-    [Export] private float _rotationSpeed;
+    [Export] private float _rotationSpeed = 5f;
+
+    private Node3D _owner;
     private Node3D _target;
-    public void FaceDirection(Node3D body)
+
+    public override void _Ready()
     {
-        _target = body;
+        _owner = GetParent<Node3D>();
+    }
+
+    public void FaceDirection(Node3D target)
+    {
+        _target = target;
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if(_owner == null || _target == null)
-        {
+        if (_owner == null || _target == null)
             return;
-        }
-        Vector3 lookDirection = _target.GlobalPosition;
-        if(_includeY == false) 
-        {
+
+        Vector3 lookDirection =
+            _target.GlobalPosition - _owner.GlobalPosition;
+
+        if (!_includeY)
             lookDirection.Y = 0;
-        }
-        if (lookDirection.LengthSquared() < 0.001f)
-        {
+
+        if (lookDirection.LengthSquared() < 0.0001f)
             return;
-        }
+
+        lookDirection = lookDirection.Normalized();
+
         Basis targetBasis = Basis.LookingAt(lookDirection, Vector3.Up);
-        Basis currentBasis = GlobalTransform.Basis;
-        Basis newBasis = currentBasis.Slerp(targetBasis, _rotationSpeed * (float)delta);
-        _owner.GlobalTransform = new Transform3D(newBasis, GlobalTransform.Origin);
+        Basis currentBasis = _owner.GlobalTransform.Basis;
+
+        Basis newBasis = currentBasis.Slerp(
+            targetBasis,
+            _rotationSpeed * (float)delta
+        );
+
+        _owner.GlobalTransform = new Transform3D(
+            newBasis,
+            _owner.GlobalTransform.Origin
+        );
     }
 }

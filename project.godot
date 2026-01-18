@@ -32,6 +32,7 @@ Player=""
 Neutral=""
 Damage=""
 walkable=""
+main_target=""
 
 [input]
 
