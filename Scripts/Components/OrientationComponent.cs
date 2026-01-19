@@ -22,7 +22,6 @@ public partial class OrientationComponent : Node3D
     {
         if (_owner == null || _target == null)
             return;
-
         Vector3 lookDirection =
             _target.GlobalPosition - _owner.GlobalPosition;
 

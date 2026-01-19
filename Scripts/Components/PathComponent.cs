@@ -5,26 +5,29 @@ public partial class PathComponent : Node3D
 {
     public event Action<Node3D> TargetReached;
     
-    [Export] private float stopDistance = 0;
+    [Export] private float stopDistance = 3f;
     [Export] private float moveSpeed = 3f;
     [Export] private float wanderRadius = 0.5f;
     [Export] private float wanderUpdateTime = 0.3f;
+    [Export] private float gravity = 1000f;
     private Node3D _mainTarget;
     public Node3D mainTarget => _mainTarget;
     private NavigationAgent3D _agent;
     private CharacterBody3D _owner;
     public Node3D _target;
-    
     public Vector3 CurrentDirection { get; private set; } = Vector3.Zero;
     
     private Vector3 _currentWanderOffset = Vector3.Zero;
     private double _timeSinceLastWander = 0;
+    private Vector3 _currentCheckpoint;
+    public event Action<Node3D> newCheckpoint;
     
     public override void _Ready()
     {
         _owner = GetParent<CharacterBody3D>();
         _agent = GetNode<NavigationAgent3D>("NavigationAgent3D");
         _mainTarget = setMainTarget();
+        _currentCheckpoint = _agent.GetNextPathPosition();
     }
     
     public void MoveTo(Node3D target)
@@ -59,6 +62,7 @@ public partial class PathComponent : Node3D
         float distanceToTarget = _owner.GlobalPosition.DistanceTo(_target.GlobalPosition);
         if (distanceToTarget <= stopDistance || _agent.IsNavigationFinished())
         {
+            GD.Print("happens");
             CurrentDirection = Vector3.Zero;
             HandleTargetReached();
             return;
@@ -79,7 +83,12 @@ public partial class PathComponent : Node3D
         Vector3 targetPosWithWander = nextPos + _currentWanderOffset;
         Vector3 dir = (targetPosWithWander - _owner.GlobalPosition).Normalized();
         
+        if(!_owner.IsOnFloor())
+        {
+            dir.Y -= gravity * (float)delta;
+        }
         CurrentDirection = dir;
+
         
         _owner.Velocity = dir * moveSpeed;
         _owner.MoveAndSlide();
@@ -91,5 +100,13 @@ public partial class PathComponent : Node3D
         if (_target != _mainTarget)
             _target = null;
         TargetReached?.Invoke(reachedTarget);
+    }
+    public void checkForNextPos()
+    {
+        if(_agent.GetNextPathPosition() != _currentCheckpoint)
+        {
+            // newCheckpoint?.Invoke(_currentCheckpoint);
+        }
+        _currentCheckpoint = _agent.GetNextPathPosition();
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d2ahx8se2vfxm"]
+[gd_scene load_steps=14 format=3 uid="uid://d2ahx8se2vfxm"]
 
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="1_4humj"]
 [ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_vpsq7"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dhr6sadpd0bai" path="res://Attributes/TargetComponent.tscn" id="4_ik78p"]
 [ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="5_j3aya"]
 [ext_resource type="PackedScene" uid="uid://bou2ogpy3om7f" path="res://Attributes/OrientationComponent.tscn" id="6_qaiqw"]
+[ext_resource type="PackedScene" uid="uid://dvjrib1u47qd0" path="res://Attributes/MeleeAttackComponent.tscn" id="8_m853d"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lkbds"]
 size = Vector3(1, 1, 2)
@@ -19,6 +20,8 @@ radius = 5.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_vpsq7"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_m853d"]
+
 [node name="TestEnemy" type="CharacterBody3D"]
 script = ExtResource("1_vpsq7")
 _detectionPath = NodePath("DetectionComponent")
@@ -27,6 +30,7 @@ _valuePath = NodePath("ValueComponent")
 _targetPath = NodePath("TargetComponent")
 _pathfindPath = NodePath("PathComponent")
 _orientationPath = NodePath("OrientationComponent")
+_attackPath = NodePath("MeleeAttackComponent")
 
 [node name="EvaluateComponent" parent="." instance=ExtResource("2_vpsq7")]
 
@@ -42,7 +46,6 @@ moveSpeed = 1.0
 debug_enabled = true
 
 [node name="OrientationComponent" parent="." instance=ExtResource("6_qaiqw")]
-_includeY = true
 _rotationSpeed = 30.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -64,3 +67,12 @@ mesh = SubResource("BoxMesh_vpsq7")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.5, 0)
 mesh = SubResource("CapsuleMesh_vpsq7")
+
+[node name="MeleeAttackComponent" parent="." instance=ExtResource("8_m853d")]
+_hitboxPath = NodePath("CollisionShape3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeleeAttackComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.001626)
+shape = SubResource("BoxShape3D_m853d")
+disabled = true
+debug_color = Color(0.9500212, 2.5027991e-06, 0.57303935, 0.41960785)

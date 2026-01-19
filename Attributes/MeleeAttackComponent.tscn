@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://dvjrib1u47qd0"]
+[gd_scene load_steps=2 format=3 uid="uid://dvjrib1u47qd0"]
 
-[node name="Node3D" type="Area3D"]
+[ext_resource type="Script" uid="uid://dwgdjsv11dcsu" path="res://Scripts/Components/MeleeAttackComponent.cs" id="1_bq8pu"]
+
+[node name="MeleeAttackComponent" type="Area3D"]
+script = ExtResource("1_bq8pu")
+attackRange = 2.0

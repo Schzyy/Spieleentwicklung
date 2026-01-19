@@ -15,17 +15,18 @@ public partial class Enemy : CharacterBody3D
     private TargetComponent _target;
     private PathComponent _path;
     private OrientationComponent _orientation;
-    private AttackComponent _attack;
+    private MeleeAttackComponent _attack;
     private Marker3D _mainTarget;
     public override void _Ready()
     {
-        _detection = GetNode<DetectionComponent>("DetectionComponent");
-        _evaluate = GetNode<EvaluateComponent>("EvaluateComponent");
-        _value = GetNode<ValueComponent>("ValueComponent");
-        _target = GetNode<TargetComponent>("TargetComponent");
-        _path = GetNodeOrNull<PathComponent>("PathComponent");
-        _orientation = GetNode<OrientationComponent>("OrientationComponent");
-        _attack = GetNodeOrNull<AttackComponent>("AttackComponent");
+        _detection = GetNode<DetectionComponent>(_detectionPath);
+        _evaluate = GetNode<EvaluateComponent>(_evaluatePath);
+        _value = GetNode<ValueComponent>(_valuePath);
+        _target = GetNode<TargetComponent>(_targetPath);
+        _path = GetNodeOrNull<PathComponent>(_pathfindPath);
+        _orientation = GetNode<OrientationComponent>(_orientationPath);
+        _attack = GetNode<MeleeAttackComponent>(_attackPath);
+        GD.Print(GetNode<MeleeAttackComponent>(_attackPath));
         GD.Print(_detection, _evaluate, _value, _target, _path, _orientation,_attack);
         if(_evaluate != null && _value != null)
         {
