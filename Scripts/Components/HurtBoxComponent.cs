@@ -4,8 +4,14 @@ using System;
 public partial class HurtBoxComponent : Area3D
 {
     [Export] public HealthComponent healthComponent;
-    public void OnHit(Bullet bullet)
+
+    public void OnHit(Node source)
     {
-        healthComponent.takeDamage(bullet.Damage);
+        if (source is not IHitSource hit)
+            return;
+
+        GD.Print("Hit received");
+
+        healthComponent.takeDamage(hit.Damage);
     }
 }

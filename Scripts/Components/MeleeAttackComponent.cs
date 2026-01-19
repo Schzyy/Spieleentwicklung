@@ -2,16 +2,18 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class MeleeAttackComponent : Area3D
+public partial class MeleeAttackComponent : Area3D, IHitSource
 {
     [Export] private NodePath _hitboxPath;
+    [Export] public int damage = 20;
+    public int Damage => damage;
+    public Node3D Owner => GetParent<Node3D>();
     private CollisionShape3D _hitbox;
     private CollisionShape3D _rangeCollision;
     private Area3D _rangeArea;
     private CylinderShape3D _cylinderShape;
     [Export] private float attackRange = 4f;
     [Export] private float attackCooldown = 2f;
-    private Node3D _owner;
     private bool _canAttack = true;
     private bool _inRange;
     private float _attackDuration = 0.3f;
@@ -21,6 +23,7 @@ public partial class MeleeAttackComponent : Area3D
     public override void _Ready()
     {
         init();
+        AreaEntered += OnAreaEntered;
     } 
     private void init()
     {
@@ -84,5 +87,12 @@ public partial class MeleeAttackComponent : Area3D
         cd.QueueFree();
 
         _canAttack = true;
+    }
+    private void OnAreaEntered(Area3D area)
+    {
+        if(area.HasMethod("OnHit"))
+        {
+            area.CallDeferred("OnHit", this);
+        }
     }
 }

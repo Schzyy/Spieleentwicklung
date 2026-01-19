@@ -60,7 +60,7 @@ radius = 3.0
 radius = 3.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aatkb"]
-size = Vector3(6, 1, 0.5)
+size = Vector3(6, 1, 0.72753906)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g0tl7"]
 albedo_color = Color(0.8117647, 0.63529414, 0.5176471, 1)
@@ -191,13 +191,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3413205, 2.8391476, 9.98181
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -5)
 
 [node name="HurtBoxComponent" parent="BreakableWalls/breakWall1" node_paths=PackedStringArray("healthComponent") groups=["Breakable"] instance=ExtResource("6_77fsy")]
-collision_layer = 8
+collision_layer = 16
 collision_mask = 0
 monitoring = false
 healthComponent = NodePath("../HealthComponent")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BreakableWalls/breakWall1/HurtBoxComponent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.11376953)
 shape = SubResource("BoxShape3D_aatkb")
 
 [node name="HealthComponent" parent="BreakableWalls/breakWall1" node_paths=PackedStringArray("hBar") instance=ExtResource("3_wyt7w")]
@@ -212,7 +212,7 @@ mesh = SubResource("BoxMesh_58kgu")
 skeleton = NodePath("")
 
 [node name="Collision" type="StaticBody3D" parent="BreakableWalls/breakWall1"]
-collision_mask = 6
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BreakableWalls/breakWall1/Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

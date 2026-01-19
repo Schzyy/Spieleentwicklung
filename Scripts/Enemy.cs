@@ -47,5 +47,9 @@ public partial class Enemy : CharacterBody3D
         _detection.EntryDetected += _evaluate.eval;
         _evaluate.TargetEvaluated += _target.onTargetEvaluated;
         _target.targetChanged += _path.MoveTo;
+
+        MeshInstance3D bearMesh = GetNode<MeshInstance3D>("Bear");
+        Aabb bounds = bearMesh.GetAabb();
+        GD.Print("Local bounds min: ", bounds.Position, " size: ", bounds.Size);
     }
 }
