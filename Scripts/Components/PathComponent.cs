@@ -34,12 +34,19 @@ public partial class PathComponent : Node3D
     {
         _target = target;
         if (IsInstanceValid(_target))
+        {
             _agent.TargetPosition = _target.GlobalPosition;
+
+        }
     }
     public Node3D setMainTarget()
     {
         var castle = GetTree().GetFirstNodeInGroup("main_target") as Node3D;
         return castle;
+    }
+    public void MoveToMain()
+    {
+        _target = null;
     }
     
     public override void _PhysicsProcess(double delta)
@@ -56,15 +63,11 @@ public partial class PathComponent : Node3D
                 return;
             }
         }
-
-        _agent.TargetPosition = _target.GlobalPosition;
-        
+            _agent.TargetPosition = _target.GlobalPosition;
         float distanceToTarget = _owner.GlobalPosition.DistanceTo(_target.GlobalPosition);
-        if (distanceToTarget <= stopDistance || _agent.IsNavigationFinished())
+        if (distanceToTarget <= stopDistance)
         {
-            GD.Print("happens");
             CurrentDirection = Vector3.Zero;
-            HandleTargetReached();
             return;
         }
         
@@ -88,8 +91,6 @@ public partial class PathComponent : Node3D
             dir.Y -= gravity * (float)delta;
         }
         CurrentDirection = dir;
-
-        
         _owner.Velocity = dir * moveSpeed;
         _owner.MoveAndSlide();
     }

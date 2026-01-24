@@ -10,7 +10,6 @@ public partial class HurtBoxComponent : Area3D
         if (source is not IHitSource hit)
             return;
 
-        GD.Print("Hit received");
 
         healthComponent.takeDamage(hit.Damage);
     }

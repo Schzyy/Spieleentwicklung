@@ -6,10 +6,11 @@ public partial class DetectionComponent : Area3D
     public override void _Ready()
     {
         AreaEntered += someoneNewEntered;
+        BodyEntered += someoneNewEntered;
     }
     private void someoneNewEntered(Node3D body)
     {
-        GD.Print("DetectionComponent " + body.Name);
+        GD.Print(body.GetParent().Name);
         EntryDetected?.Invoke(body);
     }
 }

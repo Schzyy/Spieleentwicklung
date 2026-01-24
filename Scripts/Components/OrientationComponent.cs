@@ -12,6 +12,10 @@ public partial class OrientationComponent : Node3D
     {
         _owner = GetParent<Node3D>();
     }
+    public void deleteDirection()
+    {
+        _target = null;
+    }
 
     public void FaceDirection(Node3D target)
     {

@@ -7,6 +7,7 @@ public partial class HealthComponent : Node3D
     [Export] public HealthBar hBar;
     public int health;
     private bool _isDead = false;
+    public event Action Died;
 
     public override void _Ready()
     {
@@ -23,6 +24,7 @@ public partial class HealthComponent : Node3D
         }
         if(health <= 0)
         {
+            Died?.Invoke();
             _isDead = true;
             Die();
         }

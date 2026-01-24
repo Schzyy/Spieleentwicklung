@@ -5,9 +5,9 @@ public partial class turretPlacementSystem : Node3D
 {
     [Export] public PackedScene TurretScene;
     [Export] public float MaxPlacementDistance = 50f;
-    [Export] public Color ValidPlacementColor = new Color(0, 1, 0, 0.5f); // Green transparent
-    [Export] public Color InvalidPlacementColor = new Color(1, 0, 0, 0.5f); // Red transparent
-    [Export] public uint PlacementLayerMask = 1; // Layer 1 for ground
+    [Export] public Color ValidPlacementColor = new Color(0, 1, 0, 0.5f); 
+    [Export] public Color InvalidPlacementColor = new Color(1, 0, 0, 0.5f); 
+    [Export] public uint PlacementLayerMask = 1; 
     
     private Camera3D _camera;
     private Node3D _previewTurret;
@@ -99,31 +99,25 @@ public partial class turretPlacementSystem : Node3D
             Vector3 hitPosition = (Vector3)result["position"];
             Vector3 hitNormal = (Vector3)result["normal"];
             
-            // Check if the surface is flat enough (ground-like)
             float normalDotUp = hitNormal.Dot(Vector3.Up);
             bool isFlatSurface = normalDotUp > 0.8f; 
             
             if (isFlatSurface)
             {
-                // Snap to ground level - do an additional downward raycast to be sure
                 Vector3 snapPosition = SnapToGround(hitPosition);
                 snapPosition = SnapToGrid(snapPosition);
-                GD.Print(snapPosition);
 
                 _placementPosition = snapPosition;
                 _previewTurret.GlobalPosition = _placementPosition;
                 
-                // Check if placement is valid (not overlapping with other turrets, etc.)
                 _canPlace = IsValidPlacement(_placementPosition);
             }
             else
             {
-                // Not a valid ground surface (wall, ceiling, steep slope)
                 _canPlace = false;
-                _previewTurret.GlobalPosition = hitPosition; // Show where you're aiming but mark as invalid
+                _previewTurret.GlobalPosition = hitPosition;
             }
             
-            // Update color based on validity
             Color targetColor = _canPlace ? ValidPlacementColor : InvalidPlacementColor;
             MakeTransparent(_previewTurret, targetColor);
         }
@@ -144,7 +138,6 @@ public partial class turretPlacementSystem : Node3D
         var result = spaceState.IntersectRay(query);
         if (result.Count > 0)
         {
-
             return (Vector3)result["position"];
         }
         return position;
@@ -191,6 +184,5 @@ public partial class turretPlacementSystem : Node3D
         GetTree().Root.AddChild(turret);
         turret.GlobalPosition = _placementPosition;
         turret.AddToGroup("Turret");
-        GD.Print($"Turret placed at {_placementPosition}");
     }
 }

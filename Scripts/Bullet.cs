@@ -50,7 +50,6 @@ public partial class Bullet : Area3D
 
     if (area.HasMethod("OnHit"))
     {
-        GD.Print("happens");
         area.CallDeferred("OnHit", this);
         Deactivate();
     }

@@ -1,0 +1,76 @@
+[gd_scene load_steps=14 format=3 uid="uid://bb5kue5x6oq76"]
+
+[ext_resource type="Script" uid="uid://rxv3u0qlebp0" path="res://Scripts/LaserTurret.cs" id="1_flppi"]
+[ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_lk54n"]
+[ext_resource type="PackedScene" uid="uid://o5ylnx6wmjmx" path="res://Attributes/ValueComponent.tscn" id="3_gjcxx"]
+[ext_resource type="PackedScene" uid="uid://bq0aroetfrquf" path="res://Attributes/TargetableComponent.tscn" id="4_fy7mc"]
+[ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="5_x6tji"]
+[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="6_ur8fl"]
+[ext_resource type="ArrayMesh" uid="uid://crw73jniimi1d" path="res://Assets/the sun is a deadly laser - Kopie.obj" id="7_q2svu"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="8_ni7oo"]
+[ext_resource type="PackedScene" uid="uid://dhr6sadpd0bai" path="res://Attributes/TargetComponent.tscn" id="9_pwvme"]
+[ext_resource type="PackedScene" uid="uid://d3kfa862hqiyo" path="res://Attributes/evaluateComponent.tscn" id="10_p7p2p"]
+[ext_resource type="PackedScene" uid="uid://cnjhm4rgrmrx3" path="res://Attributes/laser_attack_component.tscn" id="11_lk54n"]
+[ext_resource type="PackedScene" uid="uid://dr4bwqduawyce" path="res://Assets/bastard/bastard.glb" id="12_gjcxx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yts56"]
+size = Vector3(0.704834, 1.0239258, 1.1855469)
+
+[node name="LaserTurret" type="Node3D"]
+script = ExtResource("1_flppi")
+_detectionPath = NodePath("DetectionComponent")
+_valuePath = NodePath("ValueComponent")
+_hurtboxPath = NodePath("HurtBoxComponent")
+_healthPath = NodePath("HealthComponent")
+_targetablePath = NodePath("TargetableComponent")
+_targetPath = NodePath("TargetComponent")
+_evalPath = NodePath("EvaluateComponent")
+_laserAttackPath = NodePath("LaserAttackComponent")
+
+[node name="DetectionComponent" parent="." instance=ExtResource("2_lk54n")]
+collision_mask = 4
+
+[node name="ValueComponent" parent="." instance=ExtResource("3_gjcxx")]
+
+[node name="TargetableComponent" parent="." instance=ExtResource("4_fy7mc")]
+
+[node name="HealthBar" parent="." instance=ExtResource("5_x6tji")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.283267, 0)
+
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("healthComponent") instance=ExtResource("6_ur8fl")]
+healthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBoxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5193689, 0)
+shape = SubResource("BoxShape3D_yts56")
+
+[node name="TheSunIsADeadlyLaserKopie" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.5375346, 0)
+mesh = ExtResource("7_q2svu")
+
+[node name="Muzzle" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7012846, 3.99289)
+
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("hBar") instance=ExtResource("8_ni7oo")]
+hBar = NodePath("../HealthBar")
+
+[node name="TargetComponent" parent="." instance=ExtResource("9_pwvme")]
+
+[node name="EvaluateComponent" parent="." instance=ExtResource("10_p7p2p")]
+
+[node name="LaserAttackComponent" parent="." instance=ExtResource("11_lk54n")]
+_muzzlePath = NodePath("../Muzzle")
+
+[node name="bastard" parent="." instance=ExtResource("12_gjcxx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4630823, 0, 3.285812)
+
+[node name="Skeleton3D" parent="bastard" index="0"]
+bones/0/position = Vector3(0, -0.042239994, 0)
+
+[node name="Beine_002" parent="bastard/Skeleton3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.6232999, 0, 0, 0, 1, 0, -0.08447999, 0)
+
+[node name="Körper_002" parent="bastard/Skeleton3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.6232999, 0, 0, 0, 1, 0, -0.11615999, 0)
+
+[editable path="bastard"]

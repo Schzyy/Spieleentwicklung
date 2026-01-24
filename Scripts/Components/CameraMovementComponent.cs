@@ -5,7 +5,7 @@ public partial class CameraMovementComponent : Node3D
 {
     [Export] public float MoveSpeed = 5.0f;
     [Export] public float MouseSensitivity = 0.1f;
-    [Export] public bool UsePlanarMovement = false; // true = ignore pitch (XZ only)
+    [Export] public bool UsePlanarMovement = false; 
     [Export] public float BoostMultiplier = 3.0f;
 
     private float _pitch = 0.0f;

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq0aroetfrquf"]
+
+[ext_resource type="Script" uid="uid://bh0baf2dn4607" path="res://Scripts/Components/TargetableComponent.cs" id="1_namy2"]
+
+[node name="TargetableComponent" type="Node3D"]
+script = ExtResource("1_namy2")

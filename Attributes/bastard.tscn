@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpfrjq4r6c6d"]
+
+[ext_resource type="PackedScene" uid="uid://7ve165veni6n" path="res://bastard.glb" id="1_o8n6k"]
+
+[node name="bastard" instance=ExtResource("1_o8n6k")]
+
+[node name="Empty" parent="." index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042239994, 0)

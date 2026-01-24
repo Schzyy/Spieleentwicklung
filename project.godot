@@ -13,7 +13,6 @@ config_version=5
 config/name="Spieleentwicklung_HiveDefense"
 run/main_scene="uid://dyv0ta2bi1xoe"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
-config/icon="res://icon.svg"
 
 [debug_draw_3d]
 

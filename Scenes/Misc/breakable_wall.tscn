@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0w8d2mmrnhyh"]
+
+[ext_resource type="PackedScene" uid="uid://bq0aroetfrquf" path="res://Attributes/TargetableComponent.tscn" id="1_0xjii"]
+[ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="2_hlcys"]
+[ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="3_8jusj"]
+[ext_resource type="PackedScene" uid="uid://o5ylnx6wmjmx" path="res://Attributes/ValueComponent.tscn" id="4_5d63k"]
+[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="5_08x4r"]
+
+[node name="BreakableWall" type="Node3D"]
+
+[node name="TargetableComponent" parent="." instance=ExtResource("1_0xjii")]
+
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("hBar") instance=ExtResource("2_hlcys")]
+hBar = NodePath("../HealthBar")
+
+[node name="HealthBar" parent="." instance=ExtResource("3_8jusj")]
+
+[node name="ValueComponent" parent="." instance=ExtResource("4_5d63k")]
+
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("healthComponent") instance=ExtResource("5_08x4r")]
+collision_layer = 17
+collision_mask = 0
+monitoring = false
+healthComponent = NodePath("../HealthComponent")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 17
+collision_mask = 0

@@ -9,6 +9,7 @@ public partial class Enemy : CharacterBody3D
     [Export] private NodePath _pathfindPath;
     [Export] private NodePath _orientationPath;
     [Export] private NodePath _attackPath;
+    [Export] private NodePath _animPlayerPath;
     private DetectionComponent _detection;
     private EvaluateComponent _evaluate;
     private ValueComponent _value;
@@ -16,9 +17,11 @@ public partial class Enemy : CharacterBody3D
     private PathComponent _path;
     private OrientationComponent _orientation;
     private MeleeAttackComponent _attack;
+    private AnimationPlayer _animPlayer;
     private Marker3D _mainTarget;
     public override void _Ready()
     {
+        _animPlayer = GetNodeOrNull<AnimationPlayer>(_animPlayerPath);
         _detection = GetNode<DetectionComponent>(_detectionPath);
         _evaluate = GetNode<EvaluateComponent>(_evaluatePath);
         _value = GetNode<ValueComponent>(_valuePath);
@@ -26,8 +29,6 @@ public partial class Enemy : CharacterBody3D
         _path = GetNodeOrNull<PathComponent>(_pathfindPath);
         _orientation = GetNode<OrientationComponent>(_orientationPath);
         _attack = GetNode<MeleeAttackComponent>(_attackPath);
-        GD.Print(GetNode<MeleeAttackComponent>(_attackPath));
-        GD.Print(_detection, _evaluate, _value, _target, _path, _orientation,_attack);
         if(_evaluate != null && _value != null)
         {
             _evaluate.attachValue(_value);
@@ -42,14 +43,17 @@ public partial class Enemy : CharacterBody3D
         }
         if(_orientation != null)
         {
-            _target.targetChanged += _orientation.FaceDirection;
         }
         _detection.EntryDetected += _evaluate.eval;
         _evaluate.TargetEvaluated += _target.onTargetEvaluated;
         _target.targetChanged += _path.MoveTo;
+        _target.targetDied += _path.MoveToMain;
 
         MeshInstance3D bearMesh = GetNode<MeshInstance3D>("Bear");
         Aabb bounds = bearMesh.GetAabb();
-        GD.Print("Local bounds min: ", bounds.Position, " size: ", bounds.Size);
+    }   
+    public void playAttack()
+    {
+        _animPlayer.Play("attack");
     }
 }

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://crw73jniimi1d"
+path="res://.godot/imported/the sun is a deadly laser - Kopie.obj-7d557e28fef1a2a2a01ee38b8511572a.mesh"
+
+[deps]
+
+files=["res://.godot/imported/the sun is a deadly laser - Kopie.obj-7d557e28fef1a2a2a01ee38b8511572a.mesh"]
+
+source_file="res://Assets/the sun is a deadly laser - Kopie.obj"
+dest_files=["res://.godot/imported/the sun is a deadly laser - Kopie.obj-7d557e28fef1a2a2a01ee38b8511572a.mesh", "res://.godot/imported/the sun is a deadly laser - Kopie.obj-7d557e28fef1a2a2a01ee38b8511572a.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
