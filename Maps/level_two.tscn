@@ -1,7 +1,8 @@
-[gd_scene load_steps=37 format=3 uid="uid://bn3et8iqu7g36"]
+[gd_scene load_steps=36 format=3 uid="uid://bn3et8iqu7g36"]
 
 [ext_resource type="PackedScene" uid="uid://df0spahjyw717" path="res://Scenes/Misc/camera.tscn" id="3_lwike"]
 [ext_resource type="PackedScene" uid="uid://w4vlwgjpivuf" path="res://Attributes/HealthComponent.tscn" id="3_wyt7w"]
+[ext_resource type="Texture2D" uid="uid://crbkqi8mtlxfc" path="res://Assets/Wand_kaputtbar_robust.jpg" id="4_w3fib"]
 [ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="6_77fsy"]
 [ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="6_ctdg5"]
 [ext_resource type="PackedScene" uid="uid://d2ahx8se2vfxm" path="res://test_enemy.tscn" id="7_6167c"]
@@ -10,8 +11,6 @@
 [ext_resource type="Script" uid="uid://f01ia6db0xln" path="res://Scripts/turretPlacementSystem.cs" id="8_ctdg5"]
 [ext_resource type="PackedScene" uid="uid://dec1cf74vl45y" path="res://Scenes/Turrets/turret.tscn" id="9_6167c"]
 [ext_resource type="PackedScene" uid="uid://d0w8d2mmrnhyh" path="res://Scenes/Misc/breakable_wall.tscn" id="9_cts12"]
-[ext_resource type="PackedScene" uid="uid://bb5kue5x6oq76" path="res://Scenes/Enemy/laser_turret.tscn" id="10_w3fib"]
-[ext_resource type="PackedScene" uid="uid://7ve165veni6n" path="res://bastard.glb" id="12_pcl2a"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_fj3mn"]
 vertices = PackedVector3Array(-5, 0.5, -13, -5, 0.5, -10, 3, 0.5, -9, 6, 0.5, -13, 2, 0.5, -4, -5, 0.5, -4, -1, 0.5, 3, 6, 0.5, 3, -5, 0.5, 13, 0, 0.5, 13, -7, 1.5, -8, -7, 1.5, -6, 0, 1.5, -6, 0, 1.5, -8, 2, 2.5, 8, 2, 2.5, 12, 6, 2.5, 12, 6, 2.5, 8, 3, 0.5, 9, 3, 0.5, 11, 5, 0.5, 11, 5, 0.5, 9)
@@ -38,7 +37,20 @@ size = Vector3(1, 1, 28)
 [sub_resource type="BoxShape3D" id="BoxShape3D_p0ypl"]
 size = Vector3(1, 1, 28)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcl2a"]
+albedo_texture = ExtResource("4_w3fib")
+uv2_offset = Vector3(3, 0, 0)
+uv2_triplanar = true
+uv2_triplanar_sharpness = 2.9281716
+uv2_world_triplanar = true
+texture_filter = 0
+texture_repeat = false
+grow_amount = -0.345
+
 [sub_resource type="BoxMesh" id="BoxMesh_p734c"]
+lightmap_size_hint = Vector2i(149, 156)
+material = SubResource("StandardMaterial3D_pcl2a")
+add_uv2 = true
 size = Vector3(1, 1, 28)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_idw82"]
@@ -86,9 +98,6 @@ size = Vector3(6, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lvse"]
 albedo_color = Color(1, 0.24313726, 0.19607843, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_pcl2a"]
-size = Vector3(8.451416, 3.1538086, 13.373901)
 
 [node name="LevelOne" type="Node3D"]
 
@@ -255,13 +264,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_7lvse")
 [node name="Turret" parent="Turrets" instance=ExtResource("9_6167c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.454365, 0.8952975, 0)
 
-[node name="LaserTurret" parent="Turrets" instance=ExtResource("10_w3fib")]
-transform = Transform3D(0.03756815, 0, -0.99929404, 0, 1, 0, 0.99929404, 0, 0.03756815, 7.4139123, 0.9496398, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Turrets/LaserTurret/DetectionComponent" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.040853143, -1.0769043, 7.273626)
-shape = SubResource("BoxShape3D_pcl2a")
-
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
@@ -271,9 +273,5 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 
 [node name="TestEnemy3" parent="Node3D" instance=ExtResource("7_6167c")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.72596884, 9.536743e-07, 10.293315)
 
-[node name="bastard" parent="." instance=ExtResource("12_pcl2a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0101948, 0, 21.581514)
-
 [editable path="BreakableWalls/BreakableWall"]
 [editable path="BreakableWalls/BreakableWall2"]
-[editable path="Turrets/LaserTurret"]
