@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://qu9q8r1y9l7gs"]
+
+[ext_resource type="Script" uid="uid://gcoincthtn12t" path="res://Scripts/Weapons/BulletWeapon.cs" id="1_bltwpn"]
+
+[node name="BulletWeapon" type="Node"]
+script = ExtResource("1_bltwpn")

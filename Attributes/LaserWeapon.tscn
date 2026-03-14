@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhb877add13t8"]
+
+[ext_resource type="Script" uid="uid://2tt0yqhfwmw6k" path="res://Scripts/Weapons/LaserWeapon.cs" id="1_lsrwpn"]
+
+[node name="LaserWeapon" type="Node"]
+script = ExtResource("1_lsrwpn")

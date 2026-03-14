@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c17g3nqth1mvs"]
+[gd_scene load_steps=13 format=3 uid="uid://c17g3nqth1mvs"]
 
 [ext_resource type="Script" uid="uid://cj7p0hukeqgu5" path="res://Scripts/Enemy.cs" id="1_nvvbs"]
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="2_2t2r4"]
@@ -8,7 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://byx0loevvgu3w" path="res://Attributes/BulletPoolComponent.tscn" id="6_pqgp3"]
 [ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="8_4ad2a"]
 [ext_resource type="PackedScene" uid="uid://tmtv1ftmiv33" path="res://Scenes/Misc/bullet.tscn" id="8_kiqm3"]
-[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="9_kiqm3"]
+[ext_resource type="PackedScene" uid="uid://ymihv11in1y8r" path="res://Attributes/HitBoxComponent.tscn" id="9_hitbx"]
+[ext_resource type="PackedScene" uid="uid://dhr6sadpd0bai" path="res://Attributes/TargetComponent.tscn" id="10_target"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hghv2"]
 albedo_color = Color(0.015686275, 1, 1, 1)
@@ -28,9 +29,12 @@ size = Vector3(0.25, 0.05, 0.2)
 [sub_resource type="SphereShape3D" id="SphereShape3D_6j3ko"]
 radius = 0.3180313
 
-[node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
+[node name="Enemy" type="CharacterBody3D" groups=["Enemy"] node_paths=PackedStringArray("_detection", "_target", "_path")]
 collision_layer = 2
 script = ExtResource("1_nvvbs")
+_detection = NodePath("DetectionComponent")
+_target = NodePath("TargetComponent")
+_path = NodePath("PathComponent")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_1f0kj")
@@ -42,12 +46,12 @@ shape = SubResource("CapsuleShape3D_afpow")
 range = 4.0
 detectBreakable = true
 
-[node name="HealthComponent" parent="." node_paths=PackedStringArray("hBar") instance=ExtResource("3_2t2r4")]
-hBar = NodePath("../HealthBar")
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("_healthBar") instance=ExtResource("3_2t2r4")]
+_healthBar = NodePath("../HealthBar")
 
 [node name="PathComponent" parent="." instance=ExtResource("4_dmwl5")]
-stopDistance = 2.0
-moveSpeed = 4.0
+StopDistance = 2.0
+MoveSpeed = 4.0
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="PathComponent"]
 avoidance_enabled = true
@@ -72,8 +76,11 @@ bulletScene = ExtResource("8_kiqm3")
 [node name="HealthBar" parent="." instance=ExtResource("8_4ad2a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("healthComponent") instance=ExtResource("9_kiqm3")]
-healthComponent = NodePath("../HealthComponent")
+[node name="HitBoxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("9_hitbx")]
+_healthComponent = NodePath("../HealthComponent")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBoxComponent"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitBoxComponent"]
 shape = SubResource("SphereShape3D_6j3ko")
+
+[node name="TargetComponent" parent="." instance=ExtResource("10_target")]
+

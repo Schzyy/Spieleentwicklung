@@ -1,53 +1,74 @@
 using Godot;
 using System;
+
 public partial class TargetComponent : Node3D
 {
     private Node3D _currentTarget;
     private ITargetable _targetable;
-    public event Action<Node3D> targetChanged;
-    public event Action targetDied;
-    public void onTargetEvaluated(Node3D target)
-{
-    if (_currentTarget == target)
-        return;
 
-    ClearTarget();
+    public event Action<Node3D> TargetChanged;
+    public event Action TargetLost;
 
-    _currentTarget = target;
+    public Node3D CurrentTarget => _currentTarget;
 
-    foreach (Node child in target.GetChildren())
+    /// <summary>
+    /// Evaluates a detection candidate and sets it as the current target if it is targetable.
+    /// The candidate's parent is checked for an ITargetable child (e.g. HealthComponent).
+    /// </summary>
+    public void SetTarget(Node3D candidate)
     {
-        if (child is ITargetable targetable)
+        var root = candidate.GetParent() as Node3D;
+        if (root == null)
+            return;
+
+        if (_currentTarget == root)
+            return;
+
+        ITargetable targetable = null;
+        foreach (Node child in root.GetChildren())
         {
-            _targetable = targetable;
-            _targetable.TargetDestroyed += onTargetDestroyed;
-            break;
+            if (child is ITargetable t)
+            {
+                targetable = t;
+                break;
+            }
         }
+
+        if (targetable == null)
+            return;
+
+        ClearTarget();
+
+        _currentTarget = root;
+        _targetable = targetable;
+        _targetable.TargetDestroyed += OnTargetDestroyed;
+
+        TargetChanged?.Invoke(root);
     }
 
-    targetChanged?.Invoke(target);
-}
-    public void mainPOI(Node3D goal)
+    public void SetMainTarget(Node3D goal)
     {
         _currentTarget = goal;
     }
-    public void onTargetDestroyed(Node3D deadTarget)
-{
-    GD.Print("target died legit");
 
-    if (_currentTarget == deadTarget)
+    public void OnTargetDestroyed(Node3D deadTarget)
     {
-        ClearTarget();
-        targetDied?.Invoke();
+        GD.Print("target died");
+
+        if (_currentTarget == deadTarget)
+        {
+            ClearTarget();
+            TargetLost?.Invoke();
+        }
     }
-}
+
     private void ClearTarget()
     {
-        if(_targetable != null)
+        if (_targetable != null)
         {
-            GD.Print("inside the check");
-            _targetable.TargetDestroyed -= onTargetDestroyed;
+            _targetable.TargetDestroyed -= OnTargetDestroyed;
             _targetable = null;
         }
+        _currentTarget = null;
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bq7j7cnga04bu"]
+[gd_scene load_steps=15 format=3 uid="uid://bq7j7cnga04bu"]
 
 [ext_resource type="PackedScene" uid="uid://clar7t5x5ku57" path="res://Assets/bäääääär.glb" id="1_23qr8"]
 [ext_resource type="PackedScene" uid="uid://b1nha2vd8ke5q" path="res://Attributes/DetectionComponent.tscn" id="1_ldct8"]
@@ -7,11 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dvjrib1u47qd0" path="res://Attributes/MeleeAttackComponent.tscn" id="2_voqjb"]
 [ext_resource type="PackedScene" uid="uid://dar6iat1eb4sb" path="res://Scenes/Misc/healthbar.tscn" id="3_f5dfg"]
 [ext_resource type="PackedScene" uid="uid://1dh17t25t335" path="res://Attributes/PathComponent.tscn" id="4_pcm01"]
-[ext_resource type="PackedScene" uid="uid://d3kfa862hqiyo" path="res://Attributes/evaluateComponent.tscn" id="5_wwfb5"]
 [ext_resource type="PackedScene" uid="uid://dhr6sadpd0bai" path="res://Attributes/TargetComponent.tscn" id="6_65aqq"]
-[ext_resource type="PackedScene" uid="uid://bq0aroetfrquf" path="res://Attributes/TargetableComponent.tscn" id="7_pnbhv"]
-[ext_resource type="PackedScene" uid="uid://c6affha30hdxy" path="res://Attributes/hurt_box_component.tscn" id="7_voqjb"]
-[ext_resource type="PackedScene" uid="uid://o5ylnx6wmjmx" path="res://Attributes/ValueComponent.tscn" id="9_jx4ap"]
+[ext_resource type="PackedScene" uid="uid://ymihv11in1y8r" path="res://Attributes/HitBoxComponent.tscn" id="7_hitbx"]
 [ext_resource type="PackedScene" uid="uid://bou2ogpy3om7f" path="res://Attributes/OrientationComponent.tscn" id="12_bieb3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_osgw8"]
@@ -27,8 +24,14 @@ size = Vector3(3.4316406, 5.2973633, 7.2824707)
 height = 0.001
 radius = 15.786621
 
-[node name="BreachEnemy" type="CharacterBody3D"]
+[node name="BreachEnemy" type="CharacterBody3D" node_paths=PackedStringArray("_detection", "_target", "_path", "_orientation", "_attack", "_animPlayer")]
 script = ExtResource("1_voqjb")
+_detection = NodePath("DetectionComponent")
+_target = NodePath("TargetComponent")
+_path = NodePath("PathComponent")
+_orientation = NodePath("OrientationComponent")
+_attack = NodePath("MeleeAttackComponent")
+_animPlayer = NodePath("AnimationPlayer")
 
 [node name="Bear" parent="." instance=ExtResource("1_23qr8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3960876, 0)
@@ -50,24 +53,20 @@ disabled = true
 [node name="HealthBar" parent="." instance=ExtResource("3_f5dfg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9268875, 0)
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_1mdan")]
-
-[node name="EvaluateComponent" parent="." instance=ExtResource("5_wwfb5")]
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("_healthBar") instance=ExtResource("2_1mdan")]
+_healthBar = NodePath("../HealthBar")
 
 [node name="TargetComponent" parent="." instance=ExtResource("6_65aqq")]
 
-[node name="TargetableComponent" parent="." instance=ExtResource("7_pnbhv")]
+[node name="HitBoxComponent" parent="." node_paths=PackedStringArray("_healthComponent") instance=ExtResource("7_hitbx")]
+_healthComponent = NodePath("../HealthComponent")
 
-[node name="HurtBoxComponent" parent="." instance=ExtResource("7_voqjb")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtBoxComponent"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitBoxComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.678821, -1.5145265)
 shape = SubResource("BoxShape3D_38fi2")
 
-[node name="ValueComponent" parent="." instance=ExtResource("9_jx4ap")]
-
 [node name="PathComponent" parent="." instance=ExtResource("4_pcm01")]
-moveSpeed = 1.0
+MoveSpeed = 1.0
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="PathComponent"]
 
@@ -80,4 +79,3 @@ shape = SubResource("CylinderShape3D_mmppe")
 
 [node name="OrientationComponent" parent="." instance=ExtResource("12_bieb3")]
 
-[editable path="Bear"]

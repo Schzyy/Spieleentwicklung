@@ -3,18 +3,18 @@ using System;
 
 public partial class HealthBar : Node3D
 {
-    [Export]public ProgressBar pBar;
-    public HealthComponent healthComp;
+    [Export] public ProgressBar pBar;
+    public HealthComponent HealthComp;
 
-    public void init(HealthComponent hComp)
+    public void Init(HealthComponent hComp)
     {
-        healthComp = hComp;
-        pBar.MaxValue = healthComp.Max_health;
-        pBar.Value = healthComp.Max_health;
+        HealthComp = hComp;
+        pBar.MaxValue = HealthComp.MaxHealth;
+        pBar.Value = HealthComp.MaxHealth;
     }
 
-    public void updateHealth()
+    public void UpdateHealth()
     {
-        pBar.Value = healthComp.health;
+        pBar.Value = HealthComp.Health;
     }
 }

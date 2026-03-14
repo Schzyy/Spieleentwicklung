@@ -1,37 +1,49 @@
 using Godot;
 using System;
 
-public partial class HealthComponent : Node3D
+public partial class HealthComponent : Node3D, ITargetable
 {
-    [Export] public int Max_health = 100;
-    [Export] public HealthBar hBar;
-    public int health;
+    [Export] public int MaxHealth = 100;
+    [Export] private HealthBar _healthBar;
+
+    private int _health;
     private bool _isDead = false;
+
+    public int Health => _health;
+
     public event Action Died;
+    public event Action<Node3D> TargetDestroyed;
 
     public override void _Ready()
     {
-        hBar.init(this);
-
-        health = Max_health;
+        _health = MaxHealth;
+        _healthBar?.Init(this);
     }
-    public void takeDamage(int damage)
+
+    public void TakeDamage(int damage)
     {
-        health = health - damage;
-        if(health <= 0 && GetParent().Name == "Castle")
+        if (_isDead) return;
+        _health -= damage;
+        _healthBar?.UpdateHealth();
+        if (_health <= 0)
         {
-            GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, "res://Over.tscn");
-        }
-        if(health <= 0)
-        {
-            Died?.Invoke();
             _isDead = true;
             Die();
         }
-        hBar.updateHealth();
     }
+
     private void Die()
     {
-        GetParent().QueueFree();
+        var owner = GetParent<Node3D>();
+        Died?.Invoke();
+        TargetDestroyed?.Invoke(owner);
+        if (owner.Name == "Castle")
+        {
+            GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, "res://Over.tscn");
+            return;
+        }
+        owner.QueueFree();
     }
+
+    public Node3D AsNode() => GetParent<Node3D>();
 }
