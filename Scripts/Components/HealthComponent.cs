@@ -37,6 +37,7 @@ public partial class HealthComponent : Node3D, ITargetable
         var owner = GetParent<Node3D>();
         Died?.Invoke();
         TargetDestroyed?.Invoke(owner);
+        // TODO: Replace Name comparison with IsInGroup("castle") once the castle scene uses a group
         if (owner.Name == "Castle")
         {
             GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, "res://Over.tscn");

@@ -13,7 +13,8 @@ public partial class TargetComponent : Node3D
 
     /// <summary>
     /// Evaluates a detection candidate and sets it as the current target if it is targetable.
-    /// The candidate's parent is checked for an ITargetable child (e.g. HealthComponent).
+    /// The candidate is typically a physics body part (e.g. a collision shape child), so
+    /// the candidate's parent is checked for an ITargetable child (e.g. HealthComponent).
     /// </summary>
     public void SetTarget(Node3D candidate)
     {
@@ -48,6 +49,7 @@ public partial class TargetComponent : Node3D
 
     public void SetMainTarget(Node3D goal)
     {
+        ClearTarget();
         _currentTarget = goal;
     }
 

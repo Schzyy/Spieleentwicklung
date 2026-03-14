@@ -39,7 +39,7 @@ public partial class LaserWeapon : WeaponComponent
 
         foreach (Node child in target.GetChildren())
         {
-            if (child is HealthComponent health)
+            if (child is ITargetable targetable && targetable is HealthComponent health)
             {
                 health.TakeDamage(_damage);
                 break;
