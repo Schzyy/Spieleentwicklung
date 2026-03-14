@@ -7,144 +7,116 @@ public partial class Turret : Node3D
     [Export] public float range = 10f;
     [Export] public float rotationSpeed = 3f;
 
-    private bool active = true;
-    private Vector3 position;
-    private MeshInstance3D cannonHead;
-    private Node3D bulletHole;
-    private MeshInstance3D debugLineInstance;
-    private ImmediateMesh debugLineMesh;
+    private bool _active = true;
+    private MeshInstance3D _cannonHead;
+    private Node3D _bulletHole;
+    private MeshInstance3D _debugLineInstance;
+    private ImmediateMesh _debugLineMesh;
 
-    private AttackComponent attackComponent;
+    private AttackComponent _attackComponent;
 
     public override void _Ready()
     {
-        position = GlobalTransform.Origin;
-        cannonHead = GetNode<MeshInstance3D>("CannonShape");
-        bulletHole = cannonHead.GetNode<Node3D>("BulletPoint");
-        attackComponent = GetNode<AttackComponent>("AttackComponent");
-        debugLineMesh = new ImmediateMesh();
-        debugLineInstance = new MeshInstance3D
+        _cannonHead = GetNode<MeshInstance3D>("CannonShape");
+        _bulletHole = _cannonHead.GetNode<Node3D>("BulletPoint");
+        _attackComponent = GetNode<AttackComponent>("AttackComponent");
+        _debugLineMesh = new ImmediateMesh();
+        _debugLineInstance = new MeshInstance3D
         {
-            Mesh = debugLineMesh
+            Mesh = _debugLineMesh
         };
-        AddChild(debugLineInstance);
+        AddChild(_debugLineInstance);
     }
 
     public override void _Process(double delta)
     {
-        if(active == false)
-        {
+        if (!_active)
             return;
-        }
-        scout(delta);
+        Scout(delta);
     }
-    private void scout(double delta)
-{
-    var spaceState = GetWorld3D().DirectSpaceState;
-    var sphereShape = new SphereShape3D
+
+    private void Scout(double delta)
     {
-        Radius = range
-    };
-    
-    var query = new PhysicsShapeQueryParameters3D
-    {
-        Shape = sphereShape,
-        Transform = new Transform3D(Basis.Identity, GlobalPosition), 
-        CollideWithBodies = true,
-        CollideWithAreas = false, 
-    };
-    
-    var results = spaceState.IntersectShape(query, maxResults: 32);
-    
-    Node3D closestEnemy = null;
-    float closestDist = float.MaxValue;
-    
-    foreach (var result in results)
-    {
-        if (result.TryGetValue("collider", out var colliderObj))
+        var spaceState = GetWorld3D().DirectSpaceState;
+        var sphereShape = new SphereShape3D { Radius = range };
+        var query = new PhysicsShapeQueryParameters3D
         {
-            var collider = colliderObj.AsGodotObject();
-            
-            if (collider is CollisionObject3D collisionObject)
+            Shape = sphereShape,
+            Transform = new Transform3D(Basis.Identity, GlobalPosition),
+            CollideWithBodies = true,
+            CollideWithAreas = false,
+        };
+
+        var results = spaceState.IntersectShape(query, maxResults: 32);
+
+        Node3D closestEnemy = null;
+        float closestDist = float.MaxValue;
+
+        foreach (var result in results)
+        {
+            if (result.TryGetValue("collider", out var colliderObj))
             {
-                Node checkNode = collisionObject;
-                
-                if (!checkNode.IsInGroup("Enemy") && checkNode.GetParent() != null)
+                var collider = colliderObj.AsGodotObject();
+                if (collider is CollisionObject3D collisionObject)
                 {
-                    checkNode = checkNode.GetParent();
-                }
-                
-                if (checkNode.IsInGroup("Enemy") && checkNode is Node3D enemyNode)
-                {
-                    float dist = GlobalPosition.DistanceTo(enemyNode.GlobalPosition);
-                    if (dist < closestDist)
+                    Node checkNode = collisionObject;
+                    if (!checkNode.IsInGroup("Enemy") && checkNode.GetParent() != null)
+                        checkNode = checkNode.GetParent();
+
+                    if (checkNode.IsInGroup("Enemy") && checkNode is Node3D enemyNode)
                     {
-                        closestDist = dist;
-                        closestEnemy = enemyNode;
+                        float dist = GlobalPosition.DistanceTo(enemyNode.GlobalPosition);
+                        if (dist < closestDist)
+                        {
+                            closestDist = dist;
+                            closestEnemy = enemyNode;
+                        }
                     }
                 }
             }
         }
-    }
-    
-    DrawDebugLine(closestEnemy);
-    
-    if (closestEnemy != null)
-    {
-        alignCannon(closestEnemy, delta);
-    }
-}
 
-    private void alignCannon(Node3D enemy, double delta)
+        DrawDebugLine(closestEnemy);
+
+        if (closestEnemy != null)
+            AlignCannon(closestEnemy, delta);
+    }
+
+    private void AlignCannon(Node3D enemy, double delta)
     {
         Vector3 toTarget = enemy.GlobalPosition - GlobalPosition;
         toTarget.Y = 0;
         if (toTarget.LengthSquared() < 0.0001f)
-        {
             return;
-        }
+
         toTarget = toTarget.Normalized();
-        Basis targetBasis = Basis.LookingAt(toTarget, Vector3.Up);
-        Basis currentBasis = GlobalTransform.Basis.Orthonormalized();
-        targetBasis = targetBasis.Orthonormalized();
-        Basis newBasis = currentBasis.Slerp(targetBasis, (float)(rotationSpeed * delta));
+        Basis targetBasis = Basis.LookingAt(toTarget, Vector3.Up).Orthonormalized();
+        Basis newBasis = GlobalTransform.Basis.Orthonormalized().Slerp(targetBasis, (float)(rotationSpeed * delta));
         GlobalTransform = new Transform3D(newBasis, GlobalTransform.Origin);
-        attackComponent.TryAttack(enemy);
+
+        _attackComponent.TryAttack(enemy);
     }
 
-    public void setActive()
-    {
-        active = true;
-    }
+    public void SetActive() => _active = true;
 
-    public void setInactive()
-    {
-        active = false;
-    }
+    public void SetInactive() => _active = false;
+
     private void DrawDebugLine(Node3D enemy)
     {
-        debugLineMesh.ClearSurfaces();
-
+        _debugLineMesh.ClearSurfaces();
         if (enemy == null)
             return;
 
-        StandardMaterial3D lineMat = new StandardMaterial3D
+        _debugLineInstance.MaterialOverride = new StandardMaterial3D
         {
             AlbedoColor = Colors.Red,
             ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
             VertexColorUseAsAlbedo = true
         };
-        debugLineInstance.MaterialOverride = lineMat;
 
-        debugLineMesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
-
-        Vector3 start = debugLineInstance.ToLocal(bulletHole.GlobalPosition);
-        Vector3 end = debugLineInstance.ToLocal(enemy.GlobalPosition);
-
-        debugLineMesh.SurfaceAddVertex(start);
-        debugLineMesh.SurfaceAddVertex(end);
-
-        debugLineMesh.SurfaceEnd();
+        _debugLineMesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
+        _debugLineMesh.SurfaceAddVertex(_debugLineInstance.ToLocal(_bulletHole.GlobalPosition));
+        _debugLineMesh.SurfaceAddVertex(_debugLineInstance.ToLocal(enemy.GlobalPosition));
+        _debugLineMesh.SurfaceEnd();
     }
-
 }

@@ -73,7 +73,7 @@ public partial class MeleeAttackComponent : Area3D, IHitSource
     private async void attack()
     {
         _canAttack = false;
-        _owner.playAttack();
+        _owner.PlayAttack();
     }
     private void OnAreaEntered(Area3D area)
     {

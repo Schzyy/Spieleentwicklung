@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnjhm4rgrmrx3"]
-
-[ext_resource type="Script" uid="uid://b87myujm58gn1" path="res://Scripts/LaserAttackComponent.cs" id="1_x0f0x"]
-
-[node name="LaserAttackComponent" type="Node3D"]
-script = ExtResource("1_x0f0x")

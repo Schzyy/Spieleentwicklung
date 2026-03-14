@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3kfa862hqiyo"]
-
-[ext_resource type="Script" uid="uid://cy8eaadi5w3fe" path="res://Attributes/EvaluateComponent.cs" id="1_cy31o"]
-
-[node name="EvaluateComponent" type="Node3D"]
-script = ExtResource("1_cy31o")

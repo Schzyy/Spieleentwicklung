@@ -2,81 +2,56 @@ using Godot;
 
 public partial class Enemy : CharacterBody3D
 {
-    [Export] private NodePath _detectionPath;
-    [Export] private NodePath _evaluatePath;
-    [Export] private NodePath _valuePath;
-    [Export] private NodePath _targetPath;
-    [Export] private NodePath _pathfindPath;
-    [Export] private NodePath _orientationPath;
-    [Export] private NodePath _attackPath;
-    [Export] private NodePath _animPlayerPath;
-    private DetectionComponent _detection;
-    private EvaluateComponent _evaluate;
-    private ValueComponent _value;
-    private TargetComponent _target;
-    private PathComponent _path;
-    private OrientationComponent _orientation;
-    private MeleeAttackComponent _attack;
-    private AnimationPlayer _animPlayer;
-    private Marker3D _mainTarget;
+    [Export] private DetectionComponent _detection;
+    [Export] private TargetComponent _target;
+    [Export] private PathComponent _path;
+    [Export] private OrientationComponent _orientation;
+    [Export] private MeleeAttackComponent _attack;
+    [Export] private AnimationPlayer _animPlayer;
+
     public override void _Ready()
     {
-        _animPlayer = GetNodeOrNull<AnimationPlayer>(_animPlayerPath);
-        _detection = GetNode<DetectionComponent>(_detectionPath);
-        _evaluate = GetNode<EvaluateComponent>(_evaluatePath);
-        _value = GetNode<ValueComponent>(_valuePath);
-        _target = GetNode<TargetComponent>(_targetPath);
-        _path = GetNodeOrNull<PathComponent>(_pathfindPath);
-        _orientation = GetNode<OrientationComponent>(_orientationPath);
-        _attack = GetNode<MeleeAttackComponent>(_attackPath);
-        if(_evaluate != null && _value != null)
+        if (_path != null)
         {
-            _evaluate.attachValue(_value);
+            _target.SetMainTarget(_path.MainTarget);
         }
-        if(_attack != null)
-        {   
-        }
-        if(_path != null)
-        {
-            _target.mainPOI(_path.mainTarget);            
-        }
-        if(_orientation != null)
-        {
-        }
-        _detection.EntryDetected += _evaluate.eval;
-        _evaluate.TargetEvaluated += _target.onTargetEvaluated;
-        _target.targetChanged += _path.MoveTo;
-        _target.targetDied += _path.MoveToMain;
-        _target.targetChanged += _orientation.FaceTarget;
-        _target.targetDied += _orientation.ClearTarget;
 
-        playIdle();
-    }   
+        _detection.EntryDetected += _target.SetTarget;
+        _target.TargetChanged += _path.MoveTo;
+        _target.TargetLost += _path.MoveToMain;
+        _target.TargetChanged += _orientation.FaceTarget;
+        _target.TargetLost += _orientation.ClearTarget;
+
+        PlayIdle();
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         if (_path != null)
         {
             _orientation.FaceMovement(_path.CurrentDirection);
         }
-        playIdle();
+        PlayIdle();
     }
-    public void playAttack()
+
+    public void PlayAttack()
     {
         _animPlayer.Play("attack");
     }
-    public void playDeath()
+
+    public void PlayDeath()
     {
         _animPlayer.Play("death");
     }
-    public void playIdle()
+
+    public void PlayIdle()
     {
         _animPlayer.Play("idle");
     }
+
     public void OnAnimationFinished(StringName name)
     {
-        if(name == "attack")
-        {
-            _animPlayer.Play("idle");
-        }
+        if (name == "attack")
+            PlayIdle();
     }
 }

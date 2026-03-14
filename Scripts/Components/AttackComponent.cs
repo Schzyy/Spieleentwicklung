@@ -18,9 +18,7 @@ public partial class AttackComponent : Node
     public override void _Process(double delta)
     {
         if (_cooldownTimer > 0)
-        {
             _cooldownTimer -= delta;
-        }
     }
 
     public void TryAttack(Node3D target)
@@ -30,10 +28,9 @@ public partial class AttackComponent : Node
 
         var bullet = _bulletPool.GetBullet();
         if (bullet == null)
-            return; 
+            return;
 
         Vector3 dir = (target.GlobalPosition - muzzle.GlobalPosition).Normalized();
-
         bullet.GlobalPosition = muzzle.GlobalPosition;
         bullet.Init(dir);
 
