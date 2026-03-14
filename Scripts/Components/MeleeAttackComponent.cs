@@ -21,8 +21,6 @@ public partial class MeleeAttackComponent : Area3D, IHitSource
     private Enemy _owner;
     private RayCast3D raycast;
 
-    // RangeLogic if in range attack if possible -> cooldown not already attacking
-    // 
     public override void _Ready()
     {
         _hitbox = GetNode<CollisionShape3D>(_hitboxPath);
@@ -41,8 +39,8 @@ public partial class MeleeAttackComponent : Area3D, IHitSource
     public override void _PhysicsProcess(double delta)
     {
         var space = GetWorld3D().DirectSpaceState;
-        Vector3 from = GlobalPosition;
-        Vector3 to = from + GlobalTransform.Basis.Z  * -1.5f;
+        Vector3 from = GlobalPosition + new Vector3(0f,0.5f,0f);
+        Vector3 to = from + GlobalTransform.Basis.Z  * 1.5f;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;
         query.CollisionMask = 1 << 4;

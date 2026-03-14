@@ -11,6 +11,12 @@ public partial class EvaluateComponent : Node3D
     }
     public void eval(Node3D newEntry)
     {
+    GD.Print(newEntry.GetType() + " " + _selfValue);
+    if(newEntry is Enemy)
+    {        
+    } else
+        {
+        }
     if(_selfValue == null)
     {
         return;
@@ -18,10 +24,9 @@ public partial class EvaluateComponent : Node3D
     var root = newEntry.GetParent<Node3D>();
     foreach (Node child in root.GetChildren())
     {
-        GD.Print(newEntry.Name);
+    GD.Print(child.Name + " eval shit");
         if (child is ValueComponent valueComponent)
         {
-            GD.Print("evaluated this fella " + root.Name);
             TargetEvaluated?.Invoke(root);
         }
     }

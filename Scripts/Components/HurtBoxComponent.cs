@@ -8,9 +8,9 @@ public partial class HurtBoxComponent : Area3D
     public void OnHit(Node source)
     {
         if (source is not IHitSource hit)
+        {
             return;
-
-
+        }
         healthComponent.takeDamage(hit.Damage);
     }
 }

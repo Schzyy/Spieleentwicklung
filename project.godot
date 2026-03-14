@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Spieleentwicklung_HiveDefense"
-run/main_scene="uid://dyv0ta2bi1xoe"
+run/main_scene="uid://bn3et8iqu7g36"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 
 [debug_draw_3d]

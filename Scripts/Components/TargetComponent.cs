@@ -7,41 +7,47 @@ public partial class TargetComponent : Node3D
     public event Action<Node3D> targetChanged;
     public event Action targetDied;
     public void onTargetEvaluated(Node3D target)
+{
+    if (_currentTarget == target)
+        return;
+
+    ClearTarget();
+
+    _currentTarget = target;
+
+    foreach (Node child in target.GetChildren())
     {
-        if(_currentTarget == target)
+        if (child is ITargetable targetable)
         {
-            return;
-        }   
-        _currentTarget = target;
-        foreach (Node child in target.GetChildren())
-        {
-            if (child is TargetableComponent targetable)
-            {
-                _targetable = targetable;
-                _targetable.TargetDestroyed += onTargetDestroyed;
-            }
+            _targetable = targetable;
+            _targetable.TargetDestroyed += onTargetDestroyed;
+            break;
         }
-        targetChanged?.Invoke(target);
     }
+
+    targetChanged?.Invoke(target);
+}
     public void mainPOI(Node3D goal)
     {
         _currentTarget = goal;
     }
     public void onTargetDestroyed(Node3D deadTarget)
-    {
-        if(_currentTarget == deadTarget)
-        {
-            ClearTarget();
-        }
-    }
+{
+    GD.Print("target died legit");
 
+    if (_currentTarget == deadTarget)
+    {
+        ClearTarget();
+        targetDied?.Invoke();
+    }
+}
     private void ClearTarget()
     {
         if(_targetable != null)
         {
+            GD.Print("inside the check");
             _targetable.TargetDestroyed -= onTargetDestroyed;
             _targetable = null;
         }
     }
-
 }

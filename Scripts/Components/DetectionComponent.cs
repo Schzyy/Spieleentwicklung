@@ -10,7 +10,7 @@ public partial class DetectionComponent : Area3D
     }
     private void someoneNewEntered(Node3D body)
     {
-        GD.Print(body.GetParent().Name);
+        GD.Print(body.Name);
         EntryDetected?.Invoke(body);
     }
 }

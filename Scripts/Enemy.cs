@@ -34,8 +34,7 @@ public partial class Enemy : CharacterBody3D
             _evaluate.attachValue(_value);
         }
         if(_attack != null)
-        {
-            
+        {   
         }
         if(_path != null)
         {
@@ -48,12 +47,36 @@ public partial class Enemy : CharacterBody3D
         _evaluate.TargetEvaluated += _target.onTargetEvaluated;
         _target.targetChanged += _path.MoveTo;
         _target.targetDied += _path.MoveToMain;
+        _target.targetChanged += _orientation.FaceTarget;
+        _target.targetDied += _orientation.ClearTarget;
 
-        MeshInstance3D bearMesh = GetNode<MeshInstance3D>("Bear");
-        Aabb bounds = bearMesh.GetAabb();
+        playIdle();
     }   
+    public override void _PhysicsProcess(double delta)
+    {
+        if (_path != null)
+        {
+            _orientation.FaceMovement(_path.CurrentDirection);
+        }
+        playIdle();
+    }
     public void playAttack()
     {
         _animPlayer.Play("attack");
+    }
+    public void playDeath()
+    {
+        _animPlayer.Play("death");
+    }
+    public void playIdle()
+    {
+        _animPlayer.Play("idle");
+    }
+    public void OnAnimationFinished(StringName name)
+    {
+        if(name == "attack")
+        {
+            _animPlayer.Play("idle");
+        }
     }
 }
